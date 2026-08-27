@@ -3,7 +3,7 @@ using PlayerControl;
 using UnityEngine;
 namespace PlayerStateMachine
 {
-    public class PlayerBasicAttackState : EntityState
+    public class PlayerBasicAttackState : PlayerState
     {
         public PlayerBasicAttackState(
             PlayerController player,
@@ -31,7 +31,7 @@ namespace PlayerStateMachine
             GenerateAttackVelocity();
             CheckAndResetComboIndex();
     
-            _anim.SetInteger(AttackAnimIndexParam, _comboIndex);
+            Anim.SetInteger(AttackAnimIndexParam, _comboIndex);
         }
         
         public override void Update()
@@ -56,7 +56,7 @@ namespace PlayerStateMachine
         {
             if (_comboAttackQueued)
             {
-                _anim.SetBool(AnimBoolName, false);
+                Anim.SetBool(AnimBoolName, false);
                 Player.EnterAttackStateWithDelay();
             }
             else 

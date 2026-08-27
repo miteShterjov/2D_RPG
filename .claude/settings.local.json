@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv Enemy_Skeleton.cs EnemySkeleton.cs)",
+      "Bash(mv Enemy_Skeleton.cs.meta EnemySkeleton.cs.meta)",
+      "mcp__rider__lint_files"
+    ]
+  }
+}

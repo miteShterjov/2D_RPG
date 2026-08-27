@@ -1,4 +1,4 @@
-using PlayerStateMachine;
+using EntityStateMachine;
 
 namespace Blueprints
 {

@@ -3,7 +3,7 @@ using PlayerControl;
 
 namespace PlayerStateMachine
 {
-    public class PlayerGroundedState : EntityState
+    public class PlayerGroundedState : PlayerState
     {
         protected PlayerGroundedState(
             PlayerController player, 

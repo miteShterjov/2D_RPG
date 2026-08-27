@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PlayerStateMachine
 {
-    public class PLayerJumpAttackState : EntityState
+    public class PLayerJumpAttackState : PlayerState
     {
         public PLayerJumpAttackState(
             PlayerController player, 
@@ -32,7 +32,7 @@ namespace PlayerStateMachine
             if (Player.playerCollision.IsGrounded && !_touchedGround)
             {
                 _touchedGround = true;
-                _anim.SetTrigger(JumpAttackTrigger);
+                Anim.SetTrigger(JumpAttackTrigger);
                 Player.playerMove.SetVelocity(0, Rb.linearVelocity.y);
             }
             

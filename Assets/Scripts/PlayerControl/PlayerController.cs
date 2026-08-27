@@ -1,11 +1,12 @@
 using System.Collections;
 using Blueprints;
+using EntityControl;
 using PlayerStateMachine;
 using UnityEngine;
 
 namespace PlayerControl
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : EntityController
     {
         [Header("Attack Details")] 
         public Vector2[] attackVelocity;
@@ -27,8 +28,6 @@ namespace PlayerControl
         public PlayerBasicAttackState BasicAttackState;
         public PLayerJumpAttackState JumpAttackState;
 
-        public Animator Animator { get; private set; }
-
         private const string IdleAnimConst = "idle";
         private const string MoveAnimConst = "move";
         private const string JumpFallAnimConst = "jumpFall";
@@ -37,15 +36,9 @@ namespace PlayerControl
         private const string BasicAttackAnimConst = "basicAttack";
         private const string JumpAttackAnimConst = "jumpAttack";
         
-
-        private StateMachine _stateMachine;
-
-        private void Awake()
+        protected override void Awake()
         {
-            Animator = GetComponentInChildren<Animator>();
-
-            playerMove = GetComponent<PlayerMoveController>();
-            playerCollision = GetComponent<PlayerCollisionController>();
+            base.Awake();
 
             _stateMachine = new StateMachine();
 
@@ -69,8 +62,6 @@ namespace PlayerControl
         {
             _stateMachine.UpdateActiveState();
         }
-
-        public void CallAnimTrigger() => _stateMachine.CurrentState.CallAnimTrigger();
 
         public void EnterAttackStateWithDelay()
         {
