@@ -24,6 +24,9 @@ namespace PlayerStateMachine
             
             if (Player.playerMove.InputActions.Player.Attack.WasPressedThisFrame())
                 StateMachine.ChangeState(Player.BasicAttackState);
+            
+            if (Player.playerMove.InputActions.Player.CounterAttack.WasPressedThisFrame())
+                StateMachine.ChangeState(Player.CounterAttack);
         }
     }
 }

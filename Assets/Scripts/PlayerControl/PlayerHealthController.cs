@@ -1,8 +1,9 @@
+using EntityControl;
 using UnityEngine;
 
 namespace PlayerControl
 {
-    public class PlayerHealthController : MonoBehaviour
+    public class PlayerHealthController : EntityHealthController
     {
         
     }

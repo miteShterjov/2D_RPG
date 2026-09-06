@@ -20,6 +20,7 @@ namespace EnemyStateMachine
         public override void Update()
         {
             base.Update();
+            if (StateMachine.CurrentState == Enemy.BattleState) return;
             if (stateTimer < 0) 
                 StateMachine.ChangeState(Enemy.MoveState);
         }

@@ -21,6 +21,7 @@ namespace EnemyStateMachine
         public override void Update()
         {
             base.Update();
+            if (StateMachine.CurrentState == Enemy.BattleState) return;
             
             Enemy.entityMove.SetVelocity(
                 Enemy.enemyMove.moveSpeed * Enemy.enemyMove.FacingDir,

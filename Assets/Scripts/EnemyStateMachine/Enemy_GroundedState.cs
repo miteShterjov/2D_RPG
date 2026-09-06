@@ -16,7 +16,8 @@ namespace EnemyStateMachine
         public override void Update()
         {
             base.Update();
-            if (Enemy.enemyCollision.isPlayerDetected) StateMachine.ChangeState(Enemy.BattleState);
+            if (Enemy.enemyCollision.isPlayerDetected)
+                Enemy.TryEnterBattleState(Enemy.enemyCollision.DetectedPlayer);
         }
     }
 }

@@ -22,6 +22,12 @@ namespace EntityControl
             entityCollision = GetComponent<EntityCollisionController>();
         }
         
+        protected virtual void Update() => print("Current state of " + gameObject.tag + ": " + _stateMachine.CurrentState.GetType());
+        
         public void CallAnimTrigger() => _stateMachine.CurrentState.CallAnimTrigger();
+
+        public virtual void EntityDeath()
+        {
+        }
     }
 }

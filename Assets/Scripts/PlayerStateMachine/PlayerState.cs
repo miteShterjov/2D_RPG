@@ -27,9 +27,13 @@ namespace PlayerStateMachine
         {
             base.Update();
          
-        Anim.SetFloat(YVelocity, Rb.linearVelocity.y);
-            
-        if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame() && CanSprint()) StateMachine.ChangeState(Player.SprintState);
+            if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame() && CanSprint()) StateMachine.ChangeState(Player.SprintState);
+        }
+
+        public override void UpdateAnimationParams()
+        {
+            base.UpdateAnimationParams();
+            Anim.SetFloat(YVelocity, Rb.linearVelocity.y);
         }
 
         private bool CanSprint()

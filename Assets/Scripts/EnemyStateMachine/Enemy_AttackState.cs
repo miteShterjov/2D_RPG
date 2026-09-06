@@ -15,7 +15,7 @@ namespace EnemyStateMachine
         public override void Update()
         {
             base.Update();
-            if(TriggerCalled) StateMachine.ChangeState(Enemy.IdleState);
+            if(TriggerCalled) StateMachine.ChangeState(Enemy.BattleState);
         }
     }
 }

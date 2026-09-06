@@ -27,9 +27,11 @@ namespace PlayerStateMachine
     
             if (Player.playerMove.MoveInput.x != 0) _attackDir = ((int)Player.playerMove.MoveInput.x);
             else _attackDir = Player.playerMove.FacingDir;
-    
-            GenerateAttackVelocity();
+
+            // !!! Order matters: _comboIndex can be 4 (transient, post-3rd-hit) until reset here.
+            // Reset before reading, or GenerateAttackVelocity() indexes out of bounds.
             CheckAndResetComboIndex();
+            GenerateAttackVelocity();
     
             Anim.SetInteger(AttackAnimIndexParam, _comboIndex);
         }

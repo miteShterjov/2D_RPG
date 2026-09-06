@@ -1,9 +1,16 @@
+using EntityControl;
 using UnityEngine;
 
 namespace EnemyControl
 {
-    public class EnemyHealthController : MonoBehaviour
+    public class EnemyHealthController : EntityHealthController
     {
-        
+        private EnemyController enemyController => GetComponent<EnemyController>();
+        public override void TakeDamage(float damage, Transform damageSource)
+        {
+            base.TakeDamage(damage, damageSource);
+            if (isDead) return;
+            if (damageSource.CompareTag("Player")) enemyController.TryEnterBattleState(damageSource);
+        }
     }
 }

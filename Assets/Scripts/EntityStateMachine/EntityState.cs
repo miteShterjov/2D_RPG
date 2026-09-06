@@ -14,8 +14,6 @@ namespace EntityStateMachine
         protected float stateTimer;
         protected bool TriggerCalled;
 
-
-
         protected EntityState(StateMachine stateMachine, string animBoolName)
         {
             this.StateMachine = stateMachine;
@@ -33,6 +31,7 @@ namespace EntityStateMachine
         public virtual void Update()
         {
             stateTimer -= Time.deltaTime;
+            UpdateAnimationParams();
         }
     
         // called when we leave the state
@@ -42,5 +41,7 @@ namespace EntityStateMachine
         }
         
         public void CallAnimTrigger() => TriggerCalled = true;
+
+        public virtual void UpdateAnimationParams() {}
     }
 }

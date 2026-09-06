@@ -5,6 +5,8 @@ namespace Blueprints
     public class StateMachine
     {
         public EntityState CurrentState { get; private set;}
+        // Once entered in isLockedState=true State no exit from it. Example death state. 
+        public bool isLockedState = false;
     
         public void Initialize(EntityState startState)
         {
@@ -14,12 +16,13 @@ namespace Blueprints
     
         public void ChangeState(EntityState newState)
         {
+            if (isLockedState) return;
             CurrentState.Exit();
             CurrentState = newState;
             CurrentState.Enter();
         }
     
-        // ReSharper disable Unity.PerformanceAnalysis
         public void UpdateActiveState() => CurrentState.Update();
+        public void SwichOffStateMachine() => isLockedState = true;
     }
 }
