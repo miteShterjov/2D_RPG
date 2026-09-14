@@ -15,13 +15,15 @@ namespace Misc
         
         private static readonly int OpenChest = Animator.StringToHash("chestOpen");
 
-        public void TakeDamage(float damage, Transform damageSource)
+        public bool TakeDamage(float damage, Transform damageSource)
         {
             vfx?.PlayOnDamageFlashVFX();
             Anim?.SetBool(OpenChest, true);
             Rb.linearVelocity = knockbackForce;
             
             Rb.angularVelocity = Random.Range(-200f, 200f);
+            
+            return true;
             
             // for another day drop items logic here
         }

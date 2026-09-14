@@ -13,13 +13,13 @@ namespace EnemyControl
             enemyController = GetComponent<EnemyController>();
         }
         
-        public override void TakeDamage(float damage, Transform damageSource)
+        public override bool TakeDamage(float damage, Transform damageSource)
         {
-            base.TakeDamage(damage, damageSource);
-            
-            if (isDead) return;
+            if (!base.TakeDamage(damage, damageSource)) return false;
             
             if (damageSource.CompareTag("Player")) enemyController.TryEnterBattleState(damageSource);
+            
+            return true;
         }
     }
 }

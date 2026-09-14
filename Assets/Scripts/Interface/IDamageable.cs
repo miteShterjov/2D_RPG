@@ -4,6 +4,6 @@ namespace Interface
 {
     public interface IDamageable
     {
-        public void TakeDamage(float damage, Transform damageSource);
+        public bool TakeDamage(float damage, Transform damageSource);
     }
 }

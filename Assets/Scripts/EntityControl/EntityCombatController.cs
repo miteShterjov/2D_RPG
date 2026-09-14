@@ -34,8 +34,8 @@ namespace EntityControl
                 
                 if (damageable == null || !hitTargets.Add(damageable)) continue;
                 
-                damageable.TakeDamage(damage, transform);
-                entityVFX?.PlayOnHitEffect(target.transform);
+                bool wasTargetHit = damageable.TakeDamage(damage, transform);
+                if (wasTargetHit) entityVFX?.PlayOnHitEffect(target.transform);
             }
         }
         

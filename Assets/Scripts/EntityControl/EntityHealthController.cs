@@ -1,5 +1,4 @@
 using Interface;
-using Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,39 +7,45 @@ namespace EntityControl
     public class EntityHealthController : MonoBehaviour, IDamageable
     {
         [Header("Health")]
-        [SerializeField] private float maxHealth = 100f;
+        [SerializeField] private float currentHp;
         [SerializeField] public bool isDead;
-
+        
+        private EntityStats.EntityStats entityStats;
         private EntityVFX entityVFX;
         private Slider healthBar;
-        private float currentHp;
 
         protected virtual void Awake()
         {
             entityVFX = GetComponent<EntityVFX>();
             healthBar = GetComponentInChildren<Slider>();
+            entityStats = GetComponent<EntityStats.EntityStats>();
         }
 
         protected virtual void Start()
         {
-            currentHp = maxHealth;
+            currentHp = entityStats.GetMaxHealth();
             UpdateHealthBar();
         }
 
-        public virtual void TakeDamage(float damage, Transform damageSource)
+        public virtual bool TakeDamage(float damage, Transform damageSource)
         {
-            if (isDead) return;
+            if (isDead) return false;
+            if (IsAttackEvaded()) return false;
+            if (!damageSource) return false; 
             
-            if (damageSource != null)
-                entityVFX?.PlayKnockBackVFX(GetDirection(damageSource));
+            entityVFX?.PlayKnockBackVFX(GetDirection(damageSource));
             entityVFX?.PlayOnDamageFlashVFX();
             ReduceHealth(damage);
+            
+            return true;
         }
+
+        private bool IsAttackEvaded() => Random.Range(0, 100) < entityStats.GetEvasion();
 
         private void UpdateHealthBar()
         {
             if (healthBar == null) return;
-            healthBar.value = maxHealth > 0f ? currentHp / maxHealth : 0f;
+            healthBar.value = entityStats.GetMaxHealth() > 0f ? currentHp / entityStats.GetMaxHealth() : 0f;
         }
 
         private void ReduceHealth(float damage)
