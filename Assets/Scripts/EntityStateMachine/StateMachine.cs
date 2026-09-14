@@ -8,14 +8,16 @@ namespace EntityStateMachine
     
         public void Initialize(EntityState startState)
         {
+            if (startState == null) return;
+
             CurrentState = startState;
             CurrentState.Enter();
         }
     
         public void ChangeState(EntityState newState)
         {
-            if (isLockedState) return;
-            CurrentState.Exit();
+            if (isLockedState || newState == null) return;
+            CurrentState?.Exit();
             CurrentState = newState;
             CurrentState.Enter();
         }

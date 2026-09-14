@@ -79,6 +79,12 @@ namespace PlayerStateMachine
         
         private void GenerateAttackVelocity()
         {
+            if (Player.attackVelocity == null || Player.attackVelocity.Length < _comboIndex)
+            {
+                _attackVelocityTimer = 0f;
+                return;
+            }
+
             Vector2 attackVelocity = Player.attackVelocity[_comboIndex - 1];
             
             _attackVelocityTimer = Player.attackVelocityDuration;

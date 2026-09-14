@@ -11,6 +11,9 @@ namespace EnemyControl
         // Enables a visual sign above the enemy health bar that a counter-attack 
         // window is open for the player to execute the attack. The current alert is a 
         // red exclamation mark. 
-        public void EnableAttackAlert(bool enable) => attackAlert.SetActive(enable);
+        public void EnableAttackAlert(bool enable)
+        {
+            if (attackAlert != null) attackAlert.SetActive(enable);
+        }
     }
 }

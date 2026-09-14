@@ -27,10 +27,26 @@ namespace PlayerControl
         private void OnEnable()
         {
             InputActions.Enable();
-            InputActions.Player.Move.performed += ctx => MoveInput = ctx.ReadValue<Vector2>();
-            InputActions.Player.Move.canceled += _ => MoveInput = Vector2.zero;
+            InputActions.Player.Move.performed += HandleMovePerformed;
+            InputActions.Player.Move.canceled += HandleMoveCanceled;
         }
         
-        private void OnDisable() => InputActions.Disable();
+        private void OnDisable()
+        {
+            InputActions.Player.Move.performed -= HandleMovePerformed;
+            InputActions.Player.Move.canceled -= HandleMoveCanceled;
+            InputActions.Disable();
+            MoveInput = Vector2.zero;
+        }
+
+        private void HandleMovePerformed(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            MoveInput = context.ReadValue<Vector2>();
+        }
+
+        private void HandleMoveCanceled(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        {
+            MoveInput = Vector2.zero;
+        }
     }
 }

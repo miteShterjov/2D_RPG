@@ -31,16 +31,21 @@ namespace EntityControl
         {
             if (isDead) return;
             
-            entityVFX?.PlayKnockBackVFX(GetDirection(damageSource));
+            if (damageSource != null)
+                entityVFX?.PlayKnockBackVFX(GetDirection(damageSource));
             entityVFX?.PlayOnDamageFlashVFX();
             ReduceHealth(damage);
         }
 
-        private void UpdateHealthBar() => healthBar.value = currentHp / maxHealth;
+        private void UpdateHealthBar()
+        {
+            if (healthBar == null) return;
+            healthBar.value = maxHealth > 0f ? currentHp / maxHealth : 0f;
+        }
 
         private void ReduceHealth(float damage)
         {
-            currentHp -= damage;
+            currentHp = Mathf.Max(0f, currentHp - Mathf.Max(0f, damage));
             UpdateHealthBar();
             if (currentHp <= 0) DoDeathSequence();
         }

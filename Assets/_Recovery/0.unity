@@ -209,7 +209,7 @@ MonoBehaviour:
   isFacingRight: 1
   facingDir: 1
   patrolIdleTime: 1.5
-  moveAnimSpeedMultyplier: 0.8
+  moveAnimSpeedMultiplier: 0.8
 --- !u!50 &15019290
 Rigidbody2D:
   serializedVersion: 5

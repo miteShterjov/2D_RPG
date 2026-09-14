@@ -50,6 +50,7 @@ namespace EntityControl
 
         public void FlipEntitySprite(int facingSide)
         {
+            facingSide = facingSide < 0 ? -1 : 1;
             Vector3 scale = transform.localScale;
             transform.localScale = new Vector3(Mathf.Abs(scale.x) * facingSide, scale.y, scale.z);
             isFacingRight = facingSide > 0;

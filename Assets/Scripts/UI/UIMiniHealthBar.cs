@@ -14,8 +14,15 @@ namespace UI
             initialLocalScale = transform.localScale;
         }
         
-        private void OnEnable() => entityMove.OnFlip += HandleFlip;
-        private void OnDisable() => entityMove.OnFlip -= HandleFlip;
+        private void OnEnable()
+        {
+            if (entityMove != null) entityMove.OnFlip += HandleFlip;
+        }
+
+        private void OnDisable()
+        {
+            if (entityMove != null) entityMove.OnFlip -= HandleFlip;
+        }
 
         private void LateUpdate() => transform.rotation = Quaternion.identity;
         

@@ -13,17 +13,25 @@ namespace Misc
 
         public void CalculateImageWidth()
         {
-            _imageFullWidth = background.GetComponent<SpriteRenderer>().bounds.size.x;
+            if (background == null) return;
+
+            SpriteRenderer spriteRenderer = background.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) return;
+
+            _imageFullWidth = spriteRenderer.bounds.size.x;
             _imageHalfWidth = _imageFullWidth / 2;
         }
 
         public void Move(float distanceToMove)
         {
+            if (background == null) return;
             background.position += Vector3.right * (distanceToMove * parallaxMultiplier);
         }
 
         public void LoopBackground(float cameraLefteEdge, float cameraRightEdge)
         {
+            if (background == null || _imageFullWidth <= 0f) return;
+
             float imageRightEdge = (background.position.x + _imageHalfWidth) - imageWidthOffset;
             float imageLeftEdge = (background.position.x - _imageHalfWidth) + imageWidthOffset;
 

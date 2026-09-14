@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using EntityControl;
 using Interface;
 using UnityEngine;
@@ -13,11 +14,12 @@ namespace PlayerControl
         {
             bool hasPreformedCounter = false;
             GetDetectedColliders();
+            HashSet<ICounterable> counteredTargets = new HashSet<ICounterable>();
             
             foreach (Collider2D target in targetColliders)
             {
-                ICounterable counterable = target.GetComponent<ICounterable>();
-                if (counterable == null) continue;
+                ICounterable counterable = target.GetComponentInParent<ICounterable>();
+                if (counterable == null || !counteredTargets.Add(counterable)) continue;
                 
                 if (counterable.CanBeCountered)
                 {

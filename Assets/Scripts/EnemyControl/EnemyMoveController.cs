@@ -7,7 +7,7 @@ namespace EnemyControl
     {
         [Header("Locomotion Config")] 
         [SerializeField] public float patrolIdleTime = 1.5f;
-        [SerializeField] [Range(0, 2)] public float moveAnimSpeedMultiplier;
+        [SerializeField] [Range(0, 2)] public float moveAnimSpeedMultiplier = 1f;
 
         protected EnemyController enemy;
 

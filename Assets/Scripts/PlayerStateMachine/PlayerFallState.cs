@@ -16,8 +16,13 @@ namespace PlayerStateMachine
         {
             base.Update();
             if (Player.playerCollision.IsGrounded)
+            {
                 StateMachine.ChangeState(Player.playerMove.MoveInput.x != 0 ? Player.MoveState : Player.IdleState);
-            if (Player.playerCollision.IsWallDetected) StateMachine.ChangeState(Player.WallSlideState);
+                return;
+            }
+
+            if (Player.playerCollision.IsWallDetected)
+                StateMachine.ChangeState(Player.WallSlideState);
         }
     }
 }

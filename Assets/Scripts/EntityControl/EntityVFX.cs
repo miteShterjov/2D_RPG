@@ -24,19 +24,23 @@ namespace EntityControl
         protected virtual void Awake()
         {
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            originalMaterial = spriteRenderer.material;
+            if (spriteRenderer != null) originalMaterial = spriteRenderer.material;
         }
 
         public void PlayOnHitEffect(Transform target)
         {
+            if (onHitEffectPrefab == null || target == null) return;
+
             GameObject onHitEffect = Instantiate(onHitEffectPrefab, target.position, Quaternion.identity);
-            onHitEffect.GetComponentInChildren<SpriteRenderer>().color = onHitEffectColor;
+            SpriteRenderer effectRenderer = onHitEffect.GetComponentInChildren<SpriteRenderer>();
+            if (effectRenderer != null) effectRenderer.color = onHitEffectColor;
         }
     
         public void PlayOnDamageFlashVFX()
         {
+            if (spriteRenderer == null || onDamageMaterial == null) return;
             if (onDamageVFXCoroutine != null) StopCoroutine(onDamageVFXCoroutine);
-            StartCoroutine(OnDamageVFXCo());
+            onDamageVFXCoroutine = StartCoroutine(OnDamageVFXCo());
         }
     
         public void PlayKnockBackVFX(int direction)  
@@ -50,17 +54,23 @@ namespace EntityControl
             spriteRenderer.material = onDamageMaterial;
             yield return new WaitForSeconds(onDamageDuration);
             spriteRenderer.material = originalMaterial;
+            onDamageVFXCoroutine = null;
         }
 
         private IEnumerator KnockBackVFXCo(int direction)
         {
-            GetComponent<EntityMoveController>().IsKnockedBack = true;
-            GetComponent<Rigidbody2D>().linearVelocity = knockbackForce * direction;
+            EntityMoveController entityMove = GetComponent<EntityMoveController>();
+            Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
+            if (entityMove == null || rigidbody == null) yield break;
+
+            entityMove.IsKnockedBack = true;
+            rigidbody.linearVelocity = knockbackForce * direction;
         
             yield return new WaitForSeconds(knockbackDuration);
         
-            GetComponent<EntityMoveController>().IsKnockedBack = false;
-            GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            entityMove.IsKnockedBack = false;
+            rigidbody.linearVelocity = Vector2.zero;
+            knockbackVFXCoroutine = null;
         }
     }
 }

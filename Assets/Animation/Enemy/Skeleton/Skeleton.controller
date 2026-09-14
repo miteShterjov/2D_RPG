@@ -91,7 +91,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: moveAnimSpeedMultyplier
+    m_DirectBlendParameter: moveAnimSpeedMultiplier
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 1fa87b88bed08779aa8577a438ad7e91, type: 2}
@@ -99,7 +99,7 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: moveAnimSpeedMultyplier
+    m_DirectBlendParameter: moveAnimSpeedMultiplier
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: bf8197044c4d3791a86ed09e79047b64, type: 2}
@@ -107,10 +107,10 @@ BlendTree:
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: moveAnimSpeedMultyplier
+    m_DirectBlendParameter: moveAnimSpeedMultiplier
     m_Mirror: 0
   m_BlendParameter: xVelocity
-  m_BlendParameterY: moveAnimSpeedMultyplier
+  m_BlendParameterY: moveAnimSpeedMultiplier
   m_MinThreshold: -1
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
@@ -139,7 +139,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: bf8197044c4d3791a86ed09e79047b64, type: 2}
   m_Tag: 
-  m_SpeedParameter: moveAnimSpeedMultyplier
+  m_SpeedParameter: moveAnimSpeedMultiplier
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -278,7 +278,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: moveAnimSpeedMultyplier
+  - m_Name: moveAnimSpeedMultiplier
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -302,7 +302,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: battleAnimSpeedMultyplier
+  - m_Name: battleAnimSpeedMultiplier
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -472,7 +472,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: -6197219989906624552}
   m_Tag: 
-  m_SpeedParameter: battleAnimSpeedMultyplier
+  m_SpeedParameter: battleAnimSpeedMultiplier
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 

@@ -1,6 +1,4 @@
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
-
 namespace Misc
 {
     public class ParallaxBackground : MonoBehaviour
@@ -14,13 +12,17 @@ namespace Misc
         private void Awake()
         {
             _mainCamera = Camera.main;
-            Debug.Assert(_mainCamera != null, nameof(_mainCamera) + " != null");
+            if (_mainCamera == null) return;
+
             _cameraHalfWidth = _mainCamera.orthographicSize * _mainCamera.aspect;
+            _lastCameraPositionX = _mainCamera.transform.position.x;
             InitializeLayers();
         }
 
         private void FixedUpdate()
         {
+            if (_mainCamera == null) return;
+
             float currentCameraPositionX = _mainCamera.transform.position.x;
             float distanceToMove = currentCameraPositionX - _lastCameraPositionX;
             _lastCameraPositionX = currentCameraPositionX;
@@ -38,7 +40,9 @@ namespace Misc
         private void InitializeLayers()
         {
             foreach (ParallaxLayer layer in backgroundLayers)
-                layer.CalculateImageWidth();
+            {
+                if (layer != null) layer.CalculateImageWidth();
+            }
         }
     }
 }

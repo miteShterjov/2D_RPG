@@ -59,6 +59,15 @@ namespace PlayerControl
             StateMachine.Initialize(IdleState);
         }
 
+        protected void OnDisable()
+        {
+            if (_queuedAttackCo != null)
+            {
+                StopCoroutine(_queuedAttackCo);
+                _queuedAttackCo = null;
+            }
+        }
+
         protected override void Update()
         {
             base.Update();
@@ -81,6 +90,7 @@ namespace PlayerControl
         private IEnumerator EnterAttackStateWithDelayCo()
         {
             yield return new WaitForEndOfFrame();
+            _queuedAttackCo = null;
             StateMachine.ChangeState(BasicAttackState);
         }
         

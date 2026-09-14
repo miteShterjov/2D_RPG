@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Interface;
 using Misc;
 using UnityEngine;
@@ -25,15 +26,16 @@ namespace EntityControl
         public virtual void PreformAttackEffect()
         {
             GetDetectedColliders();
+            HashSet<IDamageable> hitTargets = new HashSet<IDamageable>();
 
             foreach (Collider2D target in targetColliders)
             {
-                IDamageable damageable = target.GetComponent<IDamageable>();
+                IDamageable damageable = target.GetComponentInParent<IDamageable>();
                 
-                if (damageable == null) continue;
+                if (damageable == null || !hitTargets.Add(damageable)) continue;
                 
                 damageable.TakeDamage(damage, transform);
-                entityVFX.PlayOnHitEffect(target.transform);
+                entityVFX?.PlayOnHitEffect(target.transform);
             }
         }
         

@@ -9,6 +9,7 @@ namespace EnemyControl
 
         protected override void Awake()
         {
+            base.Awake();
             enemyController = GetComponent<EnemyController>();
         }
         

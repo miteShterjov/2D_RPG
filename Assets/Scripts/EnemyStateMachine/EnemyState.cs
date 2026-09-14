@@ -26,7 +26,9 @@ namespace EnemyStateMachine
         {
             base.UpdateAnimationParams();
             
-            float battleAnimSpeedMultiplier = Enemy.battleMoveSpeed / Enemy.enemyMove.moveSpeed;
+            float battleAnimSpeedMultiplier = Enemy.enemyMove.moveSpeed == 0f
+                ? 0f
+                : Enemy.battleMoveSpeed / Enemy.enemyMove.moveSpeed;
             
             Anim.SetFloat(EnemyState.BattleAnimSpeedMultiplier, battleAnimSpeedMultiplier);
             Anim.SetFloat(MoveAnimSpeedMultiplier, Enemy.enemyMove.moveAnimSpeedMultiplier);

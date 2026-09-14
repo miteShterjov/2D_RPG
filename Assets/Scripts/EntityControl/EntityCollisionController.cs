@@ -30,6 +30,9 @@ namespace EntityControl
 
         private void HandleCollisionDetection()
         {
+            if (Entity == null || Entity.entityMove == null || primaryWallCheck == null || secondaryWallCheck == null)
+                return;
+
             isGrounded = Physics2D.Raycast(
                 transform.position, 
                 Vector2.down, groundCheckDistance, 
@@ -50,14 +53,14 @@ namespace EntityControl
         protected virtual void OnDrawGizmos()
         {
             const float wireSphereRadius = 0.05f;
+            if (primaryWallCheck == null || secondaryWallCheck == null) return;
+
             Gizmos.color = isGrounded ? Color.green : Color.yellow;
             Gizmos.DrawLine(primaryWallCheck.position, primaryWallCheck.position + Vector3.down * groundCheckDistance);
             Gizmos.DrawWireSphere(primaryWallCheck.position + Vector3.down * groundCheckDistance, wireSphereRadius);
             
             if (Entity == null) Entity = GetComponent<EntityController>();
             if (Entity == null || Entity.entityMove == null) return;
-            if (primaryWallCheck == null || secondaryWallCheck == null) return;
-
             Gizmos.color = isWallDetected ? Color.green : Color.yellow;
             Gizmos.DrawLine(primaryWallCheck.transform.position, primaryWallCheck.transform.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir);
             Gizmos.DrawWireSphere(primaryWallCheck.transform.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir, wireSphereRadius);
