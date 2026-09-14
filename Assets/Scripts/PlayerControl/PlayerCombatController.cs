@@ -1,4 +1,5 @@
 using EntityControl;
+using Interface;
 using UnityEngine;
 
 namespace PlayerControl

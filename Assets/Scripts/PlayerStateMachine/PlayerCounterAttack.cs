@@ -1,16 +1,16 @@
-using Blueprints;
+using EntityStateMachine;
 using PlayerControl;
 using UnityEngine;
 
 namespace PlayerStateMachine
 {
-    public class Player_CounterAttack : PlayerState
+    public class PlayerCounterAttack : PlayerState
     {
         private static readonly int CounterAttackPerformed = Animator.StringToHash("counterAttackPerformed");
         private PlayerCombatController playerCombat;
         private bool counterEnemy;
 
-        public Player_CounterAttack(
+        public PlayerCounterAttack(
             PlayerController player,
             StateMachine stateMachine,
             string animBoolName) : base(player, stateMachine, animBoolName)

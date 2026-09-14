@@ -2,13 +2,13 @@ using System;
 using EnemyControl;
 using PlayerControl;
 using UnityEngine;
-using StateMachine = Blueprints.StateMachine;
+using StateMachine = EntityStateMachine.StateMachine;
 
 namespace EnemyStateMachine
 {
-    public class Enemy_BattleState : EnemyState
+    public class EnemyBattleState : EnemyState
     {
-        public Enemy_BattleState(
+        public EnemyBattleState(
             EnemyController enemy, 
             StateMachine stateMachine, 
             string animBoolName) : base(enemy, stateMachine, animBoolName)
@@ -23,7 +23,7 @@ namespace EnemyStateMachine
             base.Enter();
             UpdateBattleTimer();
 
-            player = Enemy.player;
+            player = Enemy.Player;
 
             if (player == null)
                 return;

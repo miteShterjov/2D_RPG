@@ -1,4 +1,4 @@
-using System;
+using Interface;
 using Misc;
 using UnityEngine;
 
@@ -14,11 +14,11 @@ namespace EntityControl
         [SerializeField] private LayerMask targetMask;
         [SerializeField] private float damage = 10f;
 
-        private Entity_VFX entityVFX;
+        private EntityVFX entityVFX;
 
         protected virtual void Awake()
         {
-            entityVFX = GetComponent<Entity_VFX>();
+            entityVFX = GetComponent<EntityVFX>();
         }
 
 
@@ -39,6 +39,7 @@ namespace EntityControl
         
         protected void GetDetectedColliders()
         {
+            // ReSharper disable once Unity.PreferNonAllocApi
             targetColliders = Physics2D.OverlapCircleAll(
                 targetCheck.position, 
                 targetCheckRadius, 

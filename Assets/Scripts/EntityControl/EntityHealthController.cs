@@ -1,4 +1,4 @@
-using System;
+using Interface;
 using Misc;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,13 +11,13 @@ namespace EntityControl
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] public bool isDead;
 
-        private Entity_VFX entityVFX;
+        private EntityVFX entityVFX;
         private Slider healthBar;
         private float currentHp;
 
         protected virtual void Awake()
         {
-            entityVFX = GetComponent<Entity_VFX>();
+            entityVFX = GetComponent<EntityVFX>();
             healthBar = GetComponentInChildren<Slider>();
         }
 

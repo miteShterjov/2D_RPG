@@ -1,14 +1,13 @@
-using Blueprints;
 using EnemyControl;
 using EnemyStateMachine;
-using UnityEngine;
+using Interface;
 
 namespace EnemyNPCs
 {
     public class EnemySkeleton : EnemyController, ICounterable
     {
-        public bool CanBeCountered { get => cabBeStunned; }
-        
+        public bool CanBeCountered => cabBeStunned;
+
         private const string IdleAnimConst = "idle";
         private const string MoveAnimConst = "move";
         private const string AttackAnimConst = "attack";
@@ -21,29 +20,24 @@ namespace EnemyNPCs
             InitEnemyStates();
         }
 
+        protected void Start() => StateMachine.ChangeState(IdleState);
+        
         private void InitEnemyStates()
         {
-            IdleState = new Enemy_IdleState(this, _stateMachine, IdleAnimConst);
-            MoveState = new Enemy_MoveState(this, _stateMachine, MoveAnimConst);
-            AttackState = new Enemy_AttackState(this, _stateMachine, AttackAnimConst);
-            BattleState = new Enemy_BattleState(this, _stateMachine, BattleAnimConst);
-            DeathState = new Enemy_DeathState(this, _stateMachine, IdleAnimConst);
-            StunnedState = new Enemy_StunnedState(this, _stateMachine, StunnedAnimConst);
+            IdleState = new EnemyIdleState(this, StateMachine, IdleAnimConst);
+            MoveState = new EnemyMoveState(this, StateMachine, MoveAnimConst);
+            AttackState = new EnemyAttackState(this, StateMachine, AttackAnimConst);
+            BattleState = new EnemyBattleState(this, StateMachine, BattleAnimConst);
+            DeathState = new EnemyDeathState(this, StateMachine, IdleAnimConst);
+            StunnedState = new EnemyStunnedState(this, StateMachine, StunnedAnimConst);
         }
 
-        protected void Start()
-        {
-            _stateMachine.Initialize(IdleState);
-        }
-
-        [ContextMenu("Stun Enemy")]
         public void HandleCounterAttack()
         {
-            if (!CanBeCountered || _stateMachine.CurrentState != AttackState) return;
+            if (!CanBeCountered || StateMachine.CurrentState != AttackState) return;
+            
             EnableCounterWindow(false);
-            _stateMachine.ChangeState(StunnedState);
-        }
-
-        
+            StateMachine.ChangeState(StunnedState);
+        } 
     }
 }

@@ -1,7 +1,6 @@
-using System;
-using Blueprints;
 using EnemyStateMachine;
 using EntityControl;
+using EntityStateMachine;
 using PlayerControl;
 using UnityEngine;
 
@@ -20,32 +19,32 @@ namespace EnemyControl
         [SerializeField] public Vector2 stunnedVelocity = new Vector2(3f, 3f);
         public bool cabBeStunned;
 
-        public Enemy_IdleState IdleState;
-        public Enemy_MoveState MoveState;
-        public Enemy_AttackState AttackState;
-        public Enemy_BattleState BattleState;
-        public Enemy_DeathState DeathState;
-        public Enemy_StunnedState StunnedState;
+        public EnemyIdleState IdleState;
+        public EnemyMoveState MoveState;
+        public EnemyAttackState AttackState;
+        public EnemyBattleState BattleState;
+        protected EnemyDeathState DeathState;
+        protected EnemyStunnedState StunnedState;
 
-        public bool IsAttackStateActive => _stateMachine != null && _stateMachine.CurrentState == AttackState;
+        public bool IsAttackStateActive => StateMachine != null && StateMachine.CurrentState == AttackState;
         
         public EnemyMoveController enemyMove;
         public EnemyCollisionController enemyCollision;
         public EnemyCombatController enemyCombat;
         
-        public Transform player { get; private set; }
+        public Transform Player { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
-            _stateMachine = new StateMachine();
+            StateMachine = new StateMachine();
             InitEnemyControllers();
         }
 
         protected override void Update()
         {
             base.Update();
-            _stateMachine.UpdateActiveState();
+            StateMachine.UpdateActiveState();
         }
 
         private void OnEnable() => PlayerController.OnPlayerDeath += HandlePlayerDeath;
@@ -56,15 +55,16 @@ namespace EnemyControl
         public override void EntityDeath()
         {
             base.EntityDeath();
-            _stateMachine.ChangeState(DeathState);
+            StateMachine.ChangeState(DeathState);
         }
 
         public void TryEnterBattleState(Transform player)
         {
-            if (_stateMachine.CurrentState == BattleState) return;
-            if (_stateMachine.CurrentState == AttackState) return;
-            this.player = player;
-            _stateMachine.ChangeState(BattleState);
+            if (StateMachine.CurrentState == BattleState) return;
+            if (StateMachine.CurrentState == AttackState) return;
+            
+            this.Player = player;
+            StateMachine.ChangeState(BattleState);
         }
 
         private void InitEnemyControllers()
@@ -76,9 +76,9 @@ namespace EnemyControl
 
         private void HandlePlayerDeath()
         {
-            player = null;
-            if (_stateMachine.CurrentState == DeathState || _stateMachine.CurrentState == IdleState) return;
-            _stateMachine.ChangeState(IdleState);
+            Player = null;
+            if (StateMachine.CurrentState == DeathState || StateMachine.CurrentState == IdleState) return;
+            StateMachine.ChangeState(IdleState);
         }
     }
 }

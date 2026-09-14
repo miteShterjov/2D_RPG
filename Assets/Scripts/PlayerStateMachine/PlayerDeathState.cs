@@ -1,12 +1,12 @@
-using Blueprints;
+using EntityStateMachine;
 using PlayerControl;
 using UnityEngine;
 
 namespace PlayerStateMachine
 {
-    public class Player_DeathState : PlayerState
+    public class PlayerDeathState : PlayerState
     {
-        public Player_DeathState(
+        public PlayerDeathState(
             PlayerController player, 
             StateMachine stateMachine, 
             string animBoolName) : base(player, stateMachine, animBoolName)

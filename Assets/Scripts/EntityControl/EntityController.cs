@@ -1,5 +1,4 @@
-using System;
-using Blueprints;
+using EntityStateMachine;
 using UnityEngine;
 
 namespace EntityControl
@@ -12,7 +11,7 @@ namespace EntityControl
         public EntityMoveController entityMove;
         public EntityCollisionController entityCollision;
         
-        protected StateMachine _stateMachine;
+        protected StateMachine StateMachine;
 
         protected virtual void Awake()
         {
@@ -22,9 +21,9 @@ namespace EntityControl
             entityCollision = GetComponent<EntityCollisionController>();
         }
         
-        protected virtual void Update() => print("Current state of " + gameObject.tag + ": " + _stateMachine.CurrentState.GetType());
+        protected virtual void Update() => print("Current state of " + gameObject.tag + ": " + StateMachine.CurrentState.GetType());
         
-        public void CallAnimTrigger() => _stateMachine.CurrentState.CallAnimTrigger();
+        public void CallAnimTrigger() => StateMachine.CurrentState.CallAnimTrigger();
 
         public virtual void EntityDeath()
         {

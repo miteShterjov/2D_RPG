@@ -1,4 +1,3 @@
-using Blueprints;
 using EntityStateMachine;
 using PlayerControl;
 using UnityEngine;
@@ -30,7 +29,7 @@ namespace PlayerStateMachine
             if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame() && CanSprint()) StateMachine.ChangeState(Player.SprintState);
         }
 
-        public override void UpdateAnimationParams()
+        protected override void UpdateAnimationParams()
         {
             base.UpdateAnimationParams();
             Anim.SetFloat(YVelocity, Rb.linearVelocity.y);

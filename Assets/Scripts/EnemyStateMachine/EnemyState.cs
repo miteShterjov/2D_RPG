@@ -1,4 +1,3 @@
-using Blueprints;
 using EnemyControl;
 using EntityStateMachine;
 using UnityEngine;
@@ -8,12 +7,12 @@ namespace EnemyStateMachine
     public class EnemyState : EntityState
     {
         private static readonly int XVelocity = Animator.StringToHash("xVelocity");
-        private static readonly int MoveAnimSpeedMultyplier = Animator.StringToHash("moveAnimSpeedMultyplier");
-        private static readonly int battleAnimSpeedMultiplier = Animator.StringToHash("battleAnimSpeedMultyplier");
+        private static readonly int MoveAnimSpeedMultiplier = Animator.StringToHash("moveAnimSpeedMultiplier");
+        private static readonly int BattleAnimSpeedMultiplier = Animator.StringToHash("battleAnimSpeedMultiplier");
         
-        protected EnemyController Enemy;
-        
-        public EnemyState(
+        protected readonly EnemyController Enemy;
+
+        protected EnemyState(
             EnemyController enemy,
             StateMachine stateMachine,
             string animBoolName) : base(stateMachine, animBoolName)
@@ -22,15 +21,15 @@ namespace EnemyStateMachine
             Rb = enemy.Rb;
             Anim = enemy.Animator;
         }
-        
-        public override void UpdateAnimationParams()
+
+        protected override void UpdateAnimationParams()
         {
             base.UpdateAnimationParams();
             
-            float battleAnimSpeedMultipler = Enemy.battleMoveSpeed / Enemy.enemyMove.moveSpeed;
+            float battleAnimSpeedMultiplier = Enemy.battleMoveSpeed / Enemy.enemyMove.moveSpeed;
             
-            Anim.SetFloat(battleAnimSpeedMultiplier, battleAnimSpeedMultipler);
-            Anim.SetFloat(MoveAnimSpeedMultyplier, Enemy.enemyMove.moveAnimSpeedMultyplier);
+            Anim.SetFloat(EnemyState.BattleAnimSpeedMultiplier, battleAnimSpeedMultiplier);
+            Anim.SetFloat(MoveAnimSpeedMultiplier, Enemy.enemyMove.moveAnimSpeedMultiplier);
             Anim.SetFloat(XVelocity, Rb.linearVelocity.x);
         }
     }

@@ -16,11 +16,11 @@ namespace EntityControl
         [SerializeField] protected Transform primaryWallCheck;
         [SerializeField] protected Transform secondaryWallCheck;
 
-        protected EntityController _entity;
+        protected EntityController Entity;
 
         protected virtual void Awake()
         {
-            _entity = GetComponent<EntityController>();
+            Entity = GetComponent<EntityController>();
         }
 
         protected virtual void Update()
@@ -37,12 +37,12 @@ namespace EntityControl
 
             isWallDetected = Physics2D.Raycast(
                                  primaryWallCheck.transform.position,
-                                 Vector2.right * _entity.entityMove.FacingDir,
+                                 Vector2.right * Entity.entityMove.FacingDir,
                                  wallCheckDistance,
                                  groundMask) &&
                              Physics2D.Raycast(
                                  secondaryWallCheck.transform.position,
-                                 Vector2.right * _entity.entityMove.FacingDir,
+                                 Vector2.right * Entity.entityMove.FacingDir,
                                  wallCheckDistance,
                                  groundMask);
         }
@@ -54,15 +54,15 @@ namespace EntityControl
             Gizmos.DrawLine(primaryWallCheck.position, primaryWallCheck.position + Vector3.down * groundCheckDistance);
             Gizmos.DrawWireSphere(primaryWallCheck.position + Vector3.down * groundCheckDistance, wireSphereRadius);
             
-            if (_entity == null) _entity = GetComponent<EntityController>();
-            if (_entity == null || _entity.entityMove == null) return;
+            if (Entity == null) Entity = GetComponent<EntityController>();
+            if (Entity == null || Entity.entityMove == null) return;
             if (primaryWallCheck == null || secondaryWallCheck == null) return;
 
             Gizmos.color = isWallDetected ? Color.green : Color.yellow;
-            Gizmos.DrawLine(primaryWallCheck.transform.position, primaryWallCheck.transform.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir);
-            Gizmos.DrawWireSphere(primaryWallCheck.transform.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir, wireSphereRadius);
-            Gizmos.DrawLine(secondaryWallCheck.transform.position, secondaryWallCheck.transform.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir);
-            Gizmos.DrawWireSphere(secondaryWallCheck.transform.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir, wireSphereRadius);
+            Gizmos.DrawLine(primaryWallCheck.transform.position, primaryWallCheck.transform.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir);
+            Gizmos.DrawWireSphere(primaryWallCheck.transform.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir, wireSphereRadius);
+            Gizmos.DrawLine(secondaryWallCheck.transform.position, secondaryWallCheck.transform.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir);
+            Gizmos.DrawWireSphere(secondaryWallCheck.transform.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir, wireSphereRadius);
         }
     }
 }

@@ -1,12 +1,11 @@
-using Blueprints;
 using UnityEngine;
 
 namespace EntityStateMachine
 {
     public abstract class EntityState
     {
-        protected StateMachine StateMachine;
-        protected string AnimBoolName;
+        protected readonly StateMachine StateMachine;
+        protected readonly string AnimBoolName;
 
         protected Animator Anim;
         protected Rigidbody2D Rb;
@@ -42,6 +41,6 @@ namespace EntityStateMachine
         
         public void CallAnimTrigger() => TriggerCalled = true;
 
-        public virtual void UpdateAnimationParams() {}
+        protected virtual void UpdateAnimationParams() {}
     }
 }

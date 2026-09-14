@@ -1,17 +1,19 @@
 using EntityControl;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace EnemyControl
 {
     public class EnemyCollisionController : EntityCollisionController
     {
+        [Header("Collision Config")]
         [SerializeField] protected Transform primaryGroundCheck;
         [SerializeField] protected float aggroRange = 10f;
         [SerializeField] protected LayerMask playerMask;
+        
         public Transform DetectedPlayer { get; private set; }
         public bool isPlayerDetected;
-        protected EnemyController enemyController;
+
+        private EnemyController enemyController;
         private const string PlayerTag = "Player";
 
         protected override void Awake()
@@ -22,14 +24,15 @@ namespace EnemyControl
 
         protected override void Update()
         {
+            HandlePlayerDetection();
             HandleGroundCollision();
             HandleWallCollision();
-            HandlePlayerDetection();
+            HandlePlayerCollision();
         }
 
         private void HandlePlayerDetection()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * _entity.entityMove.FacingDir,
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * Entity.entityMove.FacingDir,
                 aggroRange, playerMask | groundMask);
             bool hitPlayer = hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer(PlayerTag);
             if (hitPlayer)
@@ -50,14 +53,14 @@ namespace EnemyControl
         private void HandleWallCollision()
         {
             isWallDetected =
-                Physics2D.Raycast(primaryWallCheck.transform.position, Vector2.right * _entity.entityMove.FacingDir,
+                Physics2D.Raycast(primaryWallCheck.transform.position, Vector2.right * Entity.entityMove.FacingDir,
                     wallCheckDistance, groundMask) && Physics2D.Raycast(secondaryWallCheck.transform.position,
-                    Vector2.right * _entity.entityMove.FacingDir, wallCheckDistance, groundMask);
+                    Vector2.right * Entity.entityMove.FacingDir, wallCheckDistance, groundMask);
         }
 
         private void HandlePlayerCollision()
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * _entity.entityMove.FacingDir,
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.right * Entity.entityMove.FacingDir,
                 aggroRange, playerMask | groundMask);
             bool hitPlayer = hit.collider != null && hit.collider.gameObject.layer == LayerMask.NameToLayer(PlayerTag);
             if (hitPlayer)
@@ -71,41 +74,68 @@ namespace EnemyControl
 
         protected override void OnDrawGizmos()
         {
-            if (_entity == null) _entity = GetComponent<EntityController>();
+            if (Entity == null) Entity = GetComponent<EntityController>();
             if (enemyController == null) enemyController = GetComponent<EnemyController>();
-            if (_entity == null || _entity.entityMove == null) return;
+            if (Entity == null || Entity.entityMove == null) return;
             if (enemyController == null) return;
             if (primaryGroundCheck == null || primaryWallCheck == null || secondaryWallCheck == null) return;
+            
             const float wireSphereRadius = 0.09f;
+            
+            DrawGroundCheckGizmos(wireSphereRadius);
+            DrawWallCheckGizmos(wireSphereRadius);
+            DrawAggroGizmos(wireSphereRadius);
+            DrawAttackRangeGizmos(wireSphereRadius);
+            DrawRetreatDistanceGizmo();
+        }
+
+        private void DrawRetreatDistanceGizmo()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, enemyController.minRetreatDistance);
+        }
+
+        private void DrawAttackRangeGizmos(float wireSphereRadius)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position,
+                new Vector3(transform.position.x + (Entity.entityMove.FacingDir * enemyController.attackDistance),
+                    transform.position.y));
+            Gizmos.DrawWireSphere(
+                new Vector3(transform.position.x + (Entity.entityMove.FacingDir * enemyController.attackDistance),
+                    transform.position.y), wireSphereRadius);
+        }
+
+        private void DrawAggroGizmos(float wireSphereRadius)
+        {
+            Gizmos.color = isPlayerDetected ? Color.red : Color.yellow;
+            Gizmos.DrawLine(transform.position,
+                transform.position + Vector3.right * aggroRange * Entity.entityMove.FacingDir);
+            Gizmos.DrawWireSphere(transform.position + Vector3.right * aggroRange * Entity.entityMove.FacingDir,
+                wireSphereRadius);
+        }
+
+        private void DrawWallCheckGizmos(float wireSphereRadius)
+        {
+            Gizmos.color = isWallDetected ? Color.green : Color.yellow;
+            Gizmos.DrawLine(primaryWallCheck.position,
+                primaryWallCheck.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir);
+            Gizmos.DrawWireSphere(
+                primaryWallCheck.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir,
+                wireSphereRadius);
+            Gizmos.DrawLine(secondaryWallCheck.position,
+                secondaryWallCheck.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir);
+            Gizmos.DrawWireSphere(
+                secondaryWallCheck.position + Vector3.right * wallCheckDistance * Entity.entityMove.FacingDir,
+                wireSphereRadius);
+        }
+
+        private void DrawGroundCheckGizmos(float wireSphereRadius)
+        {
             Gizmos.color = isGrounded ? Color.green : Color.yellow;
             Gizmos.DrawLine(primaryGroundCheck.position,
                 primaryGroundCheck.position + Vector3.down * groundCheckDistance);
             Gizmos.DrawWireSphere(primaryGroundCheck.position + Vector3.down * groundCheckDistance, wireSphereRadius);
-            Gizmos.color = isWallDetected ? Color.green : Color.yellow;
-            Gizmos.DrawLine(primaryWallCheck.position,
-                primaryWallCheck.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir);
-            Gizmos.DrawWireSphere(
-                primaryWallCheck.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir,
-                wireSphereRadius);
-            Gizmos.DrawLine(secondaryWallCheck.position,
-                secondaryWallCheck.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir);
-            Gizmos.DrawWireSphere(
-                secondaryWallCheck.position + Vector3.right * wallCheckDistance * _entity.entityMove.FacingDir,
-                wireSphereRadius);
-            Gizmos.color = isPlayerDetected ? Color.red : Color.yellow;
-            Gizmos.DrawLine(transform.position,
-                transform.position + Vector3.right * aggroRange * _entity.entityMove.FacingDir);
-            Gizmos.DrawWireSphere(transform.position + Vector3.right * aggroRange * _entity.entityMove.FacingDir,
-                wireSphereRadius);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position,
-                new Vector3(transform.position.x + (_entity.entityMove.FacingDir * enemyController.attackDistance),
-                    transform.position.y));
-            Gizmos.DrawWireSphere(
-                new Vector3(transform.position.x + (_entity.entityMove.FacingDir * enemyController.attackDistance),
-                    transform.position.y), wireSphereRadius);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, enemyController.minRetreatDistance);
         }
     }
 }

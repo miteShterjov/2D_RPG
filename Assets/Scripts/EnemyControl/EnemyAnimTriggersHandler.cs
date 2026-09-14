@@ -6,13 +6,13 @@ namespace EnemyControl
     public class EnemyAnimTriggersHandler : EntityAnimTriggersHandler
     {
         private EnemyController enemyController;
-        private Enemy_VFX enemyVFX;
+        private EnemyVFX enemyVFX;
 
         protected override void Awake()
         {
             base.Awake();
             enemyController = GetComponentInParent<EnemyController>();
-            enemyVFX = GetComponentInParent<Enemy_VFX>();
+            enemyVFX = GetComponentInParent<EnemyVFX>();
         }
 
         private void EnableCounterWindow()

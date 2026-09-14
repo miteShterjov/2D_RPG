@@ -1,11 +1,11 @@
-using Blueprints;
 using EnemyControl;
+using EntityStateMachine;
 
 namespace EnemyStateMachine
 {
-    public class Enemy_IdleState : Enemy_GroundedState
+    public class EnemyIdleState : EnemyGroundedState
     {
-        public Enemy_IdleState(
+        public EnemyIdleState(
             EnemyController enemy, 
             StateMachine stateMachine, 
             string animBoolName) : base(enemy, stateMachine, animBoolName)

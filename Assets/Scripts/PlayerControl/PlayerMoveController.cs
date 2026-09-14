@@ -10,6 +10,7 @@ namespace PlayerControl
         public float JumpForce => jumpForce;
         public float InAirMoveMultiplier => inAirMoveMultiplier;
         
+        [Header("Movement Config")]
         [SerializeField] public float jumpForce = 5f;
         [SerializeField] public float sprintSpeed = 20f;
         [SerializeField] public float sprintDuration = 0.25f;

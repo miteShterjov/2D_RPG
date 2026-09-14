@@ -1,3 +1,5 @@
+using EntityControl;
+using Interface;
 using UnityEngine;
 
 namespace Misc
@@ -9,7 +11,7 @@ namespace Misc
         
         private Animator Anim => GetComponentInChildren<Animator>();
         private Rigidbody2D Rb => GetComponent<Rigidbody2D>();
-        private Entity_VFX vfx => GetComponent<Entity_VFX>();
+        private EntityVFX vfx => GetComponent<EntityVFX>();
         
         private static readonly int OpenChest = Animator.StringToHash("chestOpen");
 

@@ -1,13 +1,11 @@
-using Blueprints;
 using EnemyControl;
 using EntityStateMachine;
-using UnityEngine;
 
 namespace EnemyStateMachine
 {
-    public class Enemy_GroundedState : EnemyState
+    public class EnemyAttackState : EnemyState
     {
-        public Enemy_GroundedState(
+        public EnemyAttackState(
             EnemyController enemy, 
             StateMachine stateMachine, 
             string animBoolName) : base(enemy, stateMachine, animBoolName)
@@ -16,8 +14,7 @@ namespace EnemyStateMachine
         public override void Update()
         {
             base.Update();
-            if (Enemy.enemyCollision.isPlayerDetected)
-                Enemy.TryEnterBattleState(Enemy.enemyCollision.DetectedPlayer);
+            if(TriggerCalled) StateMachine.ChangeState(Enemy.BattleState);
         }
     }
 }

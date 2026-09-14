@@ -1,12 +1,10 @@
-using EntityStateMachine;
-
-namespace Blueprints
+namespace EntityStateMachine
 {
     public class StateMachine
     {
         public EntityState CurrentState { get; private set;}
-        // Once entered in isLockedState=true State no exit from it. Example death state. 
-        public bool isLockedState = false;
+        
+        private bool isLockedState;
     
         public void Initialize(EntityState startState)
         {
@@ -23,6 +21,6 @@ namespace Blueprints
         }
     
         public void UpdateActiveState() => CurrentState.Update();
-        public void SwichOffStateMachine() => isLockedState = true;
+        public void LockOffStateMachine() => isLockedState = true;
     }
 }

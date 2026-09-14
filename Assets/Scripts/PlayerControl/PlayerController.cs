@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using Blueprints;
 using EntityControl;
+using EntityStateMachine;
 using PlayerStateMachine;
 using UnityEngine;
 
@@ -31,8 +31,8 @@ namespace PlayerControl
         public PlayerSprintState SprintState;
         public PlayerBasicAttackState BasicAttackState;
         public PLayerJumpAttackState JumpAttackState;
-        public Player_DeathState DeathState;
-        public Player_CounterAttack CounterAttack;
+        public PlayerCounterAttack CounterAttack;
+        private PlayerDeathState deathState;
 
         private const string IdleAnimConst = "idle";
         private const string MoveAnimConst = "move";
@@ -48,7 +48,7 @@ namespace PlayerControl
         {
             base.Awake();
 
-            _stateMachine = new StateMachine();
+            StateMachine = new StateMachine();
 
             InitPlayerStates();
             InitPlayerControllers();
@@ -56,20 +56,20 @@ namespace PlayerControl
 
         protected void Start()
         {
-            _stateMachine.Initialize(IdleState);
+            StateMachine.Initialize(IdleState);
         }
 
         protected override void Update()
         {
             base.Update();
-            _stateMachine.UpdateActiveState();
+            StateMachine.UpdateActiveState();
         }
         
         public override void EntityDeath()
         {
             base.EntityDeath();
             OnPlayerDeath?.Invoke();
-            _stateMachine.ChangeState(DeathState);
+            StateMachine.ChangeState(deathState);
         }
 
         public void EnterAttackStateWithDelay()
@@ -81,7 +81,7 @@ namespace PlayerControl
         private IEnumerator EnterAttackStateWithDelayCo()
         {
             yield return new WaitForEndOfFrame();
-            _stateMachine.ChangeState(BasicAttackState);
+            StateMachine.ChangeState(BasicAttackState);
         }
         
         private void InitPlayerControllers()
@@ -93,17 +93,17 @@ namespace PlayerControl
         
         private void InitPlayerStates()
         {
-            IdleState = new PlayerIdleState(this, _stateMachine, IdleAnimConst);
-            MoveState = new PlayerMoveState(this, _stateMachine, MoveAnimConst);
-            JumpState = new PlayerJumpState(this, _stateMachine, JumpFallAnimConst);
-            FallState = new PlayerFallState(this, _stateMachine, JumpFallAnimConst);
-            WallSlideState = new PlayerWallSlide(this, _stateMachine, WallSlideAnimConst);
-            WallJump = new PlayerWallJump(this, _stateMachine, JumpFallAnimConst);
-            SprintState = new PlayerSprintState(this, _stateMachine, SprintAnimConst);
-            BasicAttackState = new PlayerBasicAttackState(this, _stateMachine, BasicAttackAnimConst);
-            JumpAttackState = new PLayerJumpAttackState(this, _stateMachine, JumpAttackAnimConst);
-            DeathState = new Player_DeathState(this, _stateMachine, DeathAnimConst);
-            CounterAttack = new Player_CounterAttack(this, _stateMachine, CounterAttackAnimConst);
+            IdleState = new PlayerIdleState(this, StateMachine, IdleAnimConst);
+            MoveState = new PlayerMoveState(this, StateMachine, MoveAnimConst);
+            JumpState = new PlayerJumpState(this, StateMachine, JumpFallAnimConst);
+            FallState = new PlayerFallState(this, StateMachine, JumpFallAnimConst);
+            WallSlideState = new PlayerWallSlide(this, StateMachine, WallSlideAnimConst);
+            WallJump = new PlayerWallJump(this, StateMachine, JumpFallAnimConst);
+            SprintState = new PlayerSprintState(this, StateMachine, SprintAnimConst);
+            BasicAttackState = new PlayerBasicAttackState(this, StateMachine, BasicAttackAnimConst);
+            JumpAttackState = new PLayerJumpAttackState(this, StateMachine, JumpAttackAnimConst);
+            deathState = new PlayerDeathState(this, StateMachine, DeathAnimConst);
+            CounterAttack = new PlayerCounterAttack(this, StateMachine, CounterAttackAnimConst);
         }
     }
 }

@@ -1,12 +1,12 @@
-using Blueprints;
 using EnemyControl;
+using EntityStateMachine;
 using UnityEngine;
 
 namespace EnemyStateMachine
 {
-    public class Enemy_MoveState : Enemy_GroundedState
+    public class EnemyMoveState : EnemyGroundedState
     {
-        public Enemy_MoveState(
+        public EnemyMoveState(
             EnemyController enemy, 
             StateMachine stateMachine, 
             string animBoolName) : base(enemy, stateMachine, animBoolName)

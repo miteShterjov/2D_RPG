@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class UI_MiniHealthBar : MonoBehaviour
+    public class UIMiniHealthBar : MonoBehaviour
     {
         private EntityMoveController entityMove;
         private Vector3 initialLocalScale;
