@@ -10,7 +10,11 @@ namespace Misc
         [Header("Random Offset Config")]
         [SerializeField] private bool randomOffset = true;
         [SerializeField] private bool randomRotation = true;
+        [Header("Random Rotation Range")]
+        [SerializeField] private float minRotation = 0f;
+        [SerializeField] private float maxRotation = 360f;
         [Space]
+        [Header("Random Offset Range")]
         [SerializeField] private float xMinOffset = -0.3f;
         [SerializeField] private float xMaxOffset = 0.3f;
         [Space]
@@ -40,8 +44,8 @@ namespace Misc
         {
             if (!randomRotation) return;
             
-            float zRotation = Random.Range(0, 360);
-            transform.rotation = Quaternion.Euler(0, 0, zRotation);
+            float zRotation = Random.Range(minRotation, maxRotation);
+            transform.Rotate(0f, 0f, zRotation);
         }
     }
 }

@@ -10,6 +10,8 @@ namespace EntityStats
         public Stat critPower;
         public Stat critChance;
 
+        public Stat armorPenetration;
+
         public Stat fireDmg;
         public Stat iceDmg;
         public Stat lightningDmg;

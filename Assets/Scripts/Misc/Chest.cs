@@ -1,4 +1,5 @@
 using EntityControl;
+using EntityStats;
 using Interface;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace Misc
         
         private static readonly int OpenChest = Animator.StringToHash("chestOpen");
 
-        public bool TakeDamage(float damage, Transform damageSource)
+        public bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform damageSource)
         {
             vfx?.PlayOnDamageFlashVFX();
             Anim?.SetBool(OpenChest, true);

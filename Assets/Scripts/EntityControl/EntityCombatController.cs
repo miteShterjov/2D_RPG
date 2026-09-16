@@ -1,7 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
+using EntityStats;
 using Interface;
-using Misc;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace EntityControl
 {
@@ -13,17 +15,23 @@ namespace EntityControl
         [SerializeField] private Transform targetCheck;
         [SerializeField] private float targetCheckRadius;
         [SerializeField] private LayerMask targetMask;
-        [SerializeField] private float damage = 10f;
+        [FormerlySerializedAs("statusEffectDuration")]
+        [Header("Status Effects Config")]
+        [SerializeField] private float statusDefaultDuration = 10f;
+        [SerializeField] private float slowSpeedMultiplier = .2f;
 
         private EntityVFX entityVFX;
+        private EntityStats.GeneralStats generalStats;
+        
+        private Coroutine slowDownCoroutine;
 
         protected virtual void Awake()
         {
             entityVFX = GetComponent<EntityVFX>();
+            generalStats = GetComponent<EntityStats.GeneralStats>();
         }
 
-
-        public virtual void PreformAttackEffect()
+        public virtual void PreformAttack()
         {
             GetDetectedColliders();
             HashSet<IDamageable> hitTargets = new HashSet<IDamageable>();
@@ -33,10 +41,40 @@ namespace EntityControl
                 IDamageable damageable = target.GetComponentInParent<IDamageable>();
                 
                 if (damageable == null || !hitTargets.Add(damageable)) continue;
-                
-                bool wasTargetHit = damageable.TakeDamage(damage, transform);
-                if (wasTargetHit) entityVFX?.PlayOnHitEffect(target.transform);
+                float eleDmg = generalStats.GetElementalDamage(out ElementType element);
+                bool wasTargetHit = damageable.TakeDamage(
+                    generalStats.GetPhysicalDamage(out bool isCritAttack), 
+                    eleDmg, 
+                    element, 
+                    transform);
+                if (element != ElementType.None) ApplyStatusEffect(target.transform, element);
+                if (!wasTargetHit) continue;
+                entityVFX?.UpdateOnHitEffectColor(element);
+                entityVFX?.PlayOnHitEffect(target.transform, isCritAttack);
             }
+        }
+
+        public void ApplyStatusEffect(Transform target, ElementType element)
+        {
+            EntityStatusHandler statusHandler = target.GetComponent<EntityStatusHandler>();
+            
+            if (!statusHandler) return;
+
+            if (element == ElementType.Ice && statusHandler.CanEffectBeApplied(ElementType.Ice))
+            {
+                statusHandler.ApplyChilledEffect(statusDefaultDuration, slowSpeedMultiplier);
+            }
+        }
+
+        public virtual void SlowDownEntityBy(float duration, float slowMultiplier)
+        {
+            if (slowDownCoroutine != null) StopCoroutine(slowDownCoroutine);
+            slowDownCoroutine = StartCoroutine(SlowDownEntityCo(duration, slowMultiplier));
+        }
+
+        protected virtual IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
+        {
+            yield return null;
         }
         
         protected void GetDetectedColliders()

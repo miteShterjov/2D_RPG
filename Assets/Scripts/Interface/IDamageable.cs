@@ -1,9 +1,16 @@
+using EntityStats;
 using UnityEngine;
 
 namespace Interface
 {
     public interface IDamageable
     {
-        public bool TakeDamage(float damage, Transform damageSource);
+        public bool TakeDamage
+        (
+            float damage, 
+            float elementalDamage, 
+            ElementType elementType,
+            Transform damageSource
+        );
     }
 }

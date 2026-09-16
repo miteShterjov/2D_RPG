@@ -23,7 +23,7 @@ namespace PlayerStateMachine
             base.Enter();
             counterEnemy = playerCombat.CounterAttackPerformed();
 
-            if (counterEnemy) playerCombat.PreformAttackEffect();
+            if (counterEnemy) playerCombat.PreformAttack();
 
             Anim.SetBool(CounterAttackPerformed, counterEnemy);
             stateTimer = playerCombat.GetCounterRecoveryDuration();

@@ -1,4 +1,5 @@
 using System.Collections;
+using EntityStats;
 using UnityEngine;
 
 namespace EntityControl
@@ -13,27 +14,44 @@ namespace EntityControl
         [SerializeField] private float knockbackDuration = 0.2f;
         [Header("OnHitEffect")]
         [SerializeField] private Color onHitEffectColor = Color.white;
-        [SerializeField] private GameObject onHitEffectPrefab;
+        [SerializeField] private GameObject onHitPrefab;
+        [SerializeField] private GameObject critPrefab;
+        [Header("Ele hitEffect colors")]
+        [SerializeField] private Color fireHitEffectColor = Color.orangeRed;
+        [SerializeField] private Color iceHitEffectColor = Color.cyan;
+        [SerializeField] private Color thunderHitEffectColor = Color.darkGray;
     
         private Material originalMaterial;                                                                                            
         private SpriteRenderer spriteRenderer;
+        
+        private EntityMoveController entityMove;
     
         private Coroutine onDamageVFXCoroutine;
         private Coroutine knockbackVFXCoroutine;
+        
+        private Color originalColor;
 
         protected virtual void Awake()
         {
+            entityMove = GetComponent<EntityMoveController>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             if (spriteRenderer != null) originalMaterial = spriteRenderer.material;
+            
+            originalColor = onHitEffectColor;
         }
 
-        public void PlayOnHitEffect(Transform target)
+        public void PlayOnHitEffect(Transform target, bool isCrit)
         {
-            if (onHitEffectPrefab == null || target == null) return;
+            if (!onHitPrefab) return;
+            if (!critPrefab) return;
+            
+            GameObject hitPrefab = isCrit ? critPrefab : onHitPrefab;
 
-            GameObject onHitEffect = Instantiate(onHitEffectPrefab, target.position, Quaternion.identity);
+            GameObject onHitEffect = Instantiate(hitPrefab, target.position, Quaternion.identity);
             SpriteRenderer effectRenderer = onHitEffect.GetComponentInChildren<SpriteRenderer>();
-            if (effectRenderer != null) effectRenderer.color = onHitEffectColor;
+            if (effectRenderer) effectRenderer.color = onHitEffectColor;
+            if (entityMove != null && entityMove.FacingDir < 0 && isCrit)
+                onHitEffect.transform.Rotate(0, 180, 0);
         }
     
         public void PlayOnDamageFlashVFX()
@@ -57,20 +75,59 @@ namespace EntityControl
             onDamageVFXCoroutine = null;
         }
 
+        public void UpdateOnHitEffectColor(ElementType elementType)
+        {
+            onHitEffectColor = elementType switch
+            {
+                ElementType.Fire => fireHitEffectColor,
+                ElementType.Ice => iceHitEffectColor,
+                ElementType.Lightning => thunderHitEffectColor,
+                ElementType.None => originalColor,
+                _ => onHitEffectColor
+            };
+        }
+
+        public void PlayOnStatusVFX(float duration, ElementType elementType)
+        {
+            if (elementType == ElementType.Ice) 
+                StartCoroutine(PlayStatusVFX(iceHitEffectColor, duration));
+        }
+
         private IEnumerator KnockBackVFXCo(int direction)
         {
-            EntityMoveController entityMove = GetComponent<EntityMoveController>();
-            Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-            if (entityMove == null || rigidbody == null) yield break;
+            entityMove = GetComponent<EntityMoveController>();
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            if (entityMove == null || rb == null) yield break;
 
             entityMove.IsKnockedBack = true;
-            rigidbody.linearVelocity = knockbackForce * direction;
+            rb.linearVelocity = knockbackForce * direction;
         
             yield return new WaitForSeconds(knockbackDuration);
         
             entityMove.IsKnockedBack = false;
-            rigidbody.linearVelocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             knockbackVFXCoroutine = null;
+        }
+
+        private IEnumerator PlayStatusVFX(Color color, float duration)
+        {
+            float tickInterval = 0.25f;
+            float timer = 0;
+
+            Color lighterColor = iceHitEffectColor * 1.25f;
+            Color darkerColor = iceHitEffectColor * 0.75f;
+
+            bool toggle = false;
+
+            while (timer < duration)
+            {
+                spriteRenderer.color = toggle ? lighterColor : darkerColor;
+                toggle = !toggle;
+                yield return new WaitForSeconds(tickInterval);
+                timer += tickInterval;
+            }
+            
+            spriteRenderer.color = Color.white;
         }
     }
 }

@@ -1,4 +1,5 @@
 using EntityControl;
+using EntityStats;
 using UnityEngine;
 
 namespace EnemyControl
@@ -13,9 +14,10 @@ namespace EnemyControl
             enemyController = GetComponent<EnemyController>();
         }
         
-        public override bool TakeDamage(float damage, Transform damageSource)
+        public override bool TakeDamage(float damage, float elementalDamage, ElementType elementType,
+            Transform damageSource)
         {
-            if (!base.TakeDamage(damage, damageSource)) return false;
+            if (!base.TakeDamage(damage, 0, ElementType.None, damageSource)) return false;
             
             if (damageSource.CompareTag("Player")) enemyController.TryEnterBattleState(damageSource);
             

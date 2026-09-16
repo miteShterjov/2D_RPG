@@ -15,6 +15,6 @@ namespace EntityControl
 
         public void CurrentStateAnimTrigger() => _entity.CallAnimTrigger();
 
-        public void AttackTrigger() => _entityCombat.PreformAttackEffect();
+        public void AttackTrigger() => _entityCombat.PreformAttack();
     }
 }

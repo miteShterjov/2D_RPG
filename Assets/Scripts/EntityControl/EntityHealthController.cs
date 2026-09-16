@@ -1,3 +1,4 @@
+using EntityStats;
 using Interface;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace EntityControl
         [SerializeField] private float currentHp;
         [SerializeField] public bool isDead;
         
-        private EntityStats.EntityStats entityStats;
+        private EntityStats.GeneralStats generalStats;
         private EntityVFX entityVFX;
         private Slider healthBar;
 
@@ -18,43 +19,55 @@ namespace EntityControl
         {
             entityVFX = GetComponent<EntityVFX>();
             healthBar = GetComponentInChildren<Slider>();
-            entityStats = GetComponent<EntityStats.EntityStats>();
+            generalStats = GetComponent<EntityStats.GeneralStats>();
         }
 
         protected virtual void Start()
         {
-            currentHp = entityStats.GetMaxHealth();
+            currentHp = generalStats.GetMaxHealth();
             UpdateHealthBar();
         }
 
-        public virtual bool TakeDamage(float damage, Transform damageSource)
+        public virtual bool TakeDamage(
+            float damage, 
+            float elementalDamage, 
+            ElementType elementType, 
+            Transform damageSource)
         {
             if (isDead) return false;
             if (IsAttackEvaded()) return false;
-            if (!damageSource) return false; 
+            if (!damageSource) return false;
+
+            float armorPenetration = damageSource.GetComponent<EntityStats.GeneralStats>().GetArmorPenetration();
+            float armorMitigation = generalStats.GetArmorMitigation(armorPenetration);
+           
+            float eleResistance = generalStats.GetElementalResistance(elementType);
+            float eleDmgTaken = elementalDamage * (1 - eleResistance);
+            
+            float physicalDmg = damage * (1 - armorMitigation);
             
             entityVFX?.PlayKnockBackVFX(GetDirection(damageSource));
-            entityVFX?.PlayOnDamageFlashVFX();
-            ReduceHealth(damage);
             
+            ReduceHealth(physicalDmg + eleDmgTaken);
             return true;
         }
-
-        private bool IsAttackEvaded() => Random.Range(0, 100) < entityStats.GetEvasion();
-
-        private void UpdateHealthBar()
-        {
-            if (healthBar == null) return;
-            healthBar.value = entityStats.GetMaxHealth() > 0f ? currentHp / entityStats.GetMaxHealth() : 0f;
-        }
-
+        
         private void ReduceHealth(float damage)
         {
+            entityVFX?.PlayOnDamageFlashVFX();
             currentHp = Mathf.Max(0f, currentHp - Mathf.Max(0f, damage));
             UpdateHealthBar();
             if (currentHp <= 0) DoDeathSequence();
         }
-        
+
+        private bool IsAttackEvaded() => Random.Range(0, 100) < generalStats.GetEvasion();
+
+        private void UpdateHealthBar()
+        {
+            if (healthBar == null) return;
+            healthBar.value = generalStats.GetMaxHealth() > 0f ? currentHp / generalStats.GetMaxHealth() : 0f;
+        }
+
         private void DoDeathSequence()
         {  
             isDead = true;
