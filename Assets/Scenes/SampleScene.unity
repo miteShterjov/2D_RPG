@@ -354,8 +354,8 @@ MonoBehaviour:
   onHitEffectColor: {r: 0.5754717, g: 0.029859383, b: 0.029859383, a: 1}
   onHitPrefab: {fileID: 1606242323058815732, guid: 32f0f9ae1bfb83337b59a9d25bb03643, type: 3}
   critPrefab: {fileID: 2798733362475089186, guid: 17476c44792a9c0b3abab89e161739f4, type: 3}
-  fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
   iceHitEffectColor: {r: 0, g: 1, b: 1, a: 1}
+  fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
   thunderHitEffectColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
   attackAlert: {fileID: 907046829}
 --- !u!114 &15019296
@@ -389,7 +389,7 @@ MonoBehaviour:
       baseValue: 10
   offenseStats:
     damage:
-      baseValue: 10
+      baseValue: 0
     critPower:
       baseValue: 0
     critChance:
@@ -397,9 +397,9 @@ MonoBehaviour:
     armorPenetration:
       baseValue: 0
     fireDmg:
-      baseValue: 0
+      baseValue: 50
     iceDmg:
-      baseValue: 12
+      baseValue: 0
     lightningDmg:
       baseValue: 0
   defenseStats:
@@ -5264,8 +5264,8 @@ MonoBehaviour:
   onHitEffectColor: {r: 1, g: 0.7921569, b: 0.03137255, a: 1}
   onHitPrefab: {fileID: 1606242323058815732, guid: 32f0f9ae1bfb83337b59a9d25bb03643, type: 3}
   critPrefab: {fileID: 2798733362475089186, guid: 17476c44792a9c0b3abab89e161739f4, type: 3}
-  fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
   iceHitEffectColor: {r: 0, g: 1, b: 1, a: 1}
+  fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
   thunderHitEffectColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
 --- !u!114 &1234679034
 MonoBehaviour:
@@ -5298,7 +5298,7 @@ MonoBehaviour:
       baseValue: 0
   offenseStats:
     damage:
-      baseValue: 10
+      baseValue: 5
     critPower:
       baseValue: 0
     critChance:
@@ -5306,9 +5306,9 @@ MonoBehaviour:
     armorPenetration:
       baseValue: 0
     fireDmg:
-      baseValue: 0
+      baseValue: 50
     iceDmg:
-      baseValue: 15
+      baseValue: 0
     lightningDmg:
       baseValue: 0
   defenseStats:
@@ -5317,7 +5317,7 @@ MonoBehaviour:
     evasion:
       baseValue: 0
     fireResistance:
-      baseValue: 65
+      baseValue: 0
     iceResistance:
       baseValue: 0
     lightningResistance:

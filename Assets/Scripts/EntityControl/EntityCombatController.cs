@@ -21,14 +21,14 @@ namespace EntityControl
         [SerializeField] private float slowSpeedMultiplier = .2f;
 
         private EntityVFX entityVFX;
-        private EntityStats.GeneralStats generalStats;
+        private GeneralStats generalStats;
         
         private Coroutine slowDownCoroutine;
 
         protected virtual void Awake()
         {
             entityVFX = GetComponent<EntityVFX>();
-            generalStats = GetComponent<EntityStats.GeneralStats>();
+            generalStats = GetComponent<GeneralStats>();
         }
 
         public virtual void PreformAttack()
@@ -56,14 +56,15 @@ namespace EntityControl
 
         public void ApplyStatusEffect(Transform target, ElementType element)
         {
-            EntityStatusHandler statusHandler = target.GetComponent<EntityStatusHandler>();
+            EntityStatusHandler statusHandler = target.GetComponentInParent<EntityStatusHandler>();
             
             if (!statusHandler) return;
 
             if (element == ElementType.Ice && statusHandler.CanEffectBeApplied(ElementType.Ice))
-            {
                 statusHandler.ApplyChilledEffect(statusDefaultDuration, slowSpeedMultiplier);
-            }
+            
+            if (element == ElementType.Fire && statusHandler.CanEffectBeApplied(ElementType.Fire))
+                statusHandler.ApplyBurningEffect(statusDefaultDuration, generalStats.offenseStats.fireDmg.GetValue);
         }
 
         public virtual void SlowDownEntityBy(float duration, float slowMultiplier)

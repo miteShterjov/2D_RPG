@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using EntityStats;
 using UnityEngine;
@@ -17,8 +18,8 @@ namespace EntityControl
         [SerializeField] private GameObject onHitPrefab;
         [SerializeField] private GameObject critPrefab;
         [Header("Ele hitEffect colors")]
-        [SerializeField] private Color fireHitEffectColor = Color.orangeRed;
         [SerializeField] private Color iceHitEffectColor = Color.cyan;
+        [SerializeField] private Color fireHitEffectColor = Color.orangeRed;
         [SerializeField] private Color thunderHitEffectColor = Color.darkGray;
     
         private Material originalMaterial;                                                                                            
@@ -89,8 +90,23 @@ namespace EntityControl
 
         public void PlayOnStatusVFX(float duration, ElementType elementType)
         {
-            if (elementType == ElementType.Ice) 
-                StartCoroutine(PlayStatusVFX(iceHitEffectColor, duration));
+            switch (elementType)
+            {
+                case ElementType.Ice:
+                    StartCoroutine(PlayStatusVFX(iceHitEffectColor, duration));
+                    break;
+                case ElementType.Fire:
+                    StartCoroutine(PlayStatusVFX(fireHitEffectColor, duration));
+                    break;
+                case ElementType.Lightning:
+                    StartCoroutine(PlayStatusVFX(thunderHitEffectColor, duration));
+                    break;
+                case ElementType.None:
+                    break;
+                default:
+                    StopCoroutine(PlayStatusVFX(spriteRenderer.color, 0));
+                    break;
+            }
         }
 
         private IEnumerator KnockBackVFXCo(int direction)
@@ -111,6 +127,8 @@ namespace EntityControl
 
         private IEnumerator PlayStatusVFX(Color color, float duration)
         {
+            if (color == spriteRenderer.color) yield break;
+            
             float tickInterval = 0.25f;
             float timer = 0;
 

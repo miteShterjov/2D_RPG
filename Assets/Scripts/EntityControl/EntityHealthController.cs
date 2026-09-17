@@ -11,7 +11,7 @@ namespace EntityControl
         [SerializeField] private float currentHp;
         [SerializeField] public bool isDead;
         
-        private EntityStats.GeneralStats generalStats;
+        private GeneralStats generalStats;
         private EntityVFX entityVFX;
         private Slider healthBar;
 
@@ -19,7 +19,7 @@ namespace EntityControl
         {
             entityVFX = GetComponent<EntityVFX>();
             healthBar = GetComponentInChildren<Slider>();
-            generalStats = GetComponent<EntityStats.GeneralStats>();
+            generalStats = GetComponent<GeneralStats>();
         }
 
         protected virtual void Start()
@@ -38,7 +38,7 @@ namespace EntityControl
             if (IsAttackEvaded()) return false;
             if (!damageSource) return false;
 
-            float armorPenetration = damageSource.GetComponent<EntityStats.GeneralStats>().GetArmorPenetration();
+            float armorPenetration = damageSource.GetComponent<GeneralStats>().GetArmorPenetration();
             float armorMitigation = generalStats.GetArmorMitigation(armorPenetration);
            
             float eleResistance = generalStats.GetElementalResistance(elementType);
@@ -52,7 +52,7 @@ namespace EntityControl
             return true;
         }
         
-        private void ReduceHealth(float damage)
+        public void ReduceHealth(float damage)
         {
             entityVFX?.PlayOnDamageFlashVFX();
             currentHp = Mathf.Max(0f, currentHp - Mathf.Max(0f, damage));
