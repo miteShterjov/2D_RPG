@@ -1,4 +1,5 @@
 using EntityStateMachine;
+using EntityStats;
 using UnityEngine;
 
 namespace EntityControl
@@ -7,7 +8,8 @@ namespace EntityControl
     {
         public Animator Animator { get; private set; }
         public Rigidbody2D Rb => entityMove.rb;
-
+        public GeneralStats generalStats;
+         
         public EntityMoveController entityMove;
         public EntityCollisionController entityCollision;
         
@@ -19,6 +21,7 @@ namespace EntityControl
             
             entityMove = GetComponent<EntityMoveController>();
             entityCollision = GetComponent<EntityCollisionController>();
+            generalStats = GetComponent<GeneralStats>();
         }
         
         protected virtual void Update()

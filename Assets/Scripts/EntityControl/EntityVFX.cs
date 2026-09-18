@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using EntityStats;
 using UnityEngine;
@@ -20,7 +19,7 @@ namespace EntityControl
         [Header("Ele hitEffect colors")]
         [SerializeField] private Color iceHitEffectColor = Color.cyan;
         [SerializeField] private Color fireHitEffectColor = Color.orangeRed;
-        [SerializeField] private Color thunderHitEffectColor = Color.darkGray;
+        [SerializeField] private Color thunderHitEffectColor = Color.softYellow;
     
         private Material originalMaterial;                                                                                            
         private SpriteRenderer spriteRenderer;
@@ -68,14 +67,6 @@ namespace EntityControl
             knockbackVFXCoroutine = StartCoroutine(KnockBackVFXCo(direction));
         }
 
-        private IEnumerator OnDamageVFXCo()
-        {
-            spriteRenderer.material = onDamageMaterial;
-            yield return new WaitForSeconds(onDamageDuration);
-            spriteRenderer.material = originalMaterial;
-            onDamageVFXCoroutine = null;
-        }
-
         public void UpdateOnHitEffectColor(ElementType elementType)
         {
             onHitEffectColor = elementType switch
@@ -108,6 +99,13 @@ namespace EntityControl
                     break;
             }
         }
+        
+        public void StopAllStatusEffects()
+        {
+            StopAllCoroutines();
+            spriteRenderer.color = Color.white;
+            spriteRenderer.material = originalMaterial;
+        }
 
         private IEnumerator KnockBackVFXCo(int direction)
         {
@@ -132,8 +130,8 @@ namespace EntityControl
             float tickInterval = 0.25f;
             float timer = 0;
 
-            Color lighterColor = iceHitEffectColor * 1.25f;
-            Color darkerColor = iceHitEffectColor * 0.75f;
+            Color lighterColor = color * 1.25f;
+            Color darkerColor = color * 0.75f;
 
             bool toggle = false;
 
@@ -146,6 +144,14 @@ namespace EntityControl
             }
             
             spriteRenderer.color = Color.white;
+        }
+        
+        private IEnumerator OnDamageVFXCo()
+        {
+            spriteRenderer.material = onDamageMaterial;
+            yield return new WaitForSeconds(onDamageDuration);
+            spriteRenderer.material = originalMaterial;
+            onDamageVFXCoroutine = null;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,9 +14,9 @@ namespace EntityStats
 
         public float GetMaxHealth()
         {
-            float baseHealth = baseStats.maxHealth.GetValue;
+            float baseHealth = baseStats.maxHealth.GetValue();
             // every point of vitality adds 5 health points
-            float bonusHealth = majorStats.vitality.GetValue * 5;
+            float bonusHealth = majorStats.vitality.GetValue() * 5;
             
             float finalHealth = baseHealth + bonusHealth;
             
@@ -24,9 +25,9 @@ namespace EntityStats
 
         public float GetArmorMitigation(float armorReduction = 0f)
         {
-            float baseArmor = defenseStats.armor.GetValue;
+            float baseArmor = defenseStats.armor.GetValue();
             // bonus 1 armor point for every vitality point
-            float bonusBaseArmor = majorStats.vitality.GetValue;
+            float bonusBaseArmor = majorStats.vitality.GetValue();
             float finalBaseArmor = baseArmor + bonusBaseArmor;
             
             float armorReductionMultiplier = Mathf.Clamp(1 - armorReduction, 0, 1);
@@ -42,9 +43,9 @@ namespace EntityStats
 
         public float GetEvasion()
         {
-            float baseEvasion = defenseStats.evasion.GetValue;
+            float baseEvasion = defenseStats.evasion.GetValue();
             // each point of agility adds 0.5% evasion
-            float bonusEvasion = majorStats.agility.GetValue * 0.5f;
+            float bonusEvasion = majorStats.agility.GetValue() * 0.5f;
             float finalEvasion = baseEvasion + bonusEvasion;
             const float evasionCap = 85f;
             float totalEvasion = Mathf.Clamp(finalEvasion, 0f, evasionCap);
@@ -54,19 +55,19 @@ namespace EntityStats
 
         public float GetPhysicalDamage(out bool isCrit)
         {
-            float baseDamage = offenseStats.damage.GetValue;
+            float baseDamage = offenseStats.damage.GetValue();
             // each point of strength adds 1 damage point
-            float bonusDamage = majorStats.strength.GetValue;
+            float bonusDamage = majorStats.strength.GetValue();
             float totalBaseDamage = baseDamage + bonusDamage;
             
-            float baseCritChance = offenseStats.critChance.GetValue;
+            float baseCritChance = offenseStats.critChance.GetValue();
             // each point of agility adds 0.3% crit chance
-            float bonusCritChance = majorStats.agility.GetValue * 0.3f;
+            float bonusCritChance = majorStats.agility.GetValue() * 0.3f;
             float totalCritChance = baseCritChance + bonusCritChance;
 
-            float baseCritPower = offenseStats.critPower.GetValue;
+            float baseCritPower = offenseStats.critPower.GetValue();
             // every point of strength adds +0.5% to crit power
-            float bonusCritPower = majorStats.strength.GetValue * 0.05f;
+            float bonusCritPower = majorStats.strength.GetValue() * 0.05f;
             // total crit power as multiplier of base crit power
             float totalCritPower = (baseCritPower + bonusCritPower) / 100;
             
@@ -79,7 +80,7 @@ namespace EntityStats
         public float GetArmorPenetration()
         {
             // armor pen as multiplier stat
-            float armorPen = offenseStats.armorPenetration.GetValue / 100;
+            float armorPen = offenseStats.armorPenetration.GetValue() / 100;
             const float armorPenCap = 0.6f;
             
             float finalArmorPen = Mathf.Clamp(armorPen, 0f, armorPenCap);
@@ -89,17 +90,40 @@ namespace EntityStats
 
         public float GetElementalDamage(out ElementType element)
         {
-            float fireDmg = offenseStats.fireDmg.GetValue;
-            float iceDmg = offenseStats.iceDmg.GetValue;
-            float staticDmg = offenseStats.lightningDmg.GetValue;
+            float fireDmg = offenseStats.fireDmg.GetValue();
+            float iceDmg = offenseStats.iceDmg.GetValue();
+            float staticDmg = offenseStats.lightningDmg.GetValue();
             // bonus 1 point per 1 point of int
-            float bonusEleDmg = majorStats.intelligence.GetValue;
+            float bonusEleDmg = majorStats.intelligence.GetValue();
             
             float highestDmg = Mathf.Max(fireDmg, iceDmg, staticDmg);
-            element = fireDmg > iceDmg && fireDmg > staticDmg ? ElementType.Fire : ElementType.None;
-            element = iceDmg > fireDmg && iceDmg > staticDmg ? ElementType.Ice : element;
-            element = staticDmg > fireDmg && staticDmg > iceDmg ? ElementType.Lightning : element;
+            element = Mathf.Approximately(fireDmg, highestDmg) ? ElementType.Fire : ElementType.None;
+            element = Mathf.Approximately(iceDmg, highestDmg) ? ElementType.Ice : element;
+            element = Mathf.Approximately(staticDmg, highestDmg) ? ElementType.Lightning : element;
+            element = Mathf.Approximately(highestDmg, 0) ? ElementType.None : element;
             
+            // the other values that are not max give bonus eleDmg
+            // equal to 50% of their value
+            float bonusFireDmg = (Mathf.Approximately(fireDmg, highestDmg)) ? 0 : fireDmg * 0.5f;
+            float bonusIceDmg = (Mathf.Approximately(iceDmg, highestDmg)) ? 0 : iceDmg * 0.5f;
+            float bonusStaticDmg = (Mathf.Approximately(staticDmg, highestDmg)) ? 0 : staticDmg * 0.5f;
+            float bonusLesserEleDmg = bonusFireDmg + bonusIceDmg + bonusStaticDmg;
+            
+            if (highestDmg <= 0) return 0;
+            
+            float finalDmg = highestDmg + bonusEleDmg + bonusLesserEleDmg;
+            return finalDmg;
+        }
+
+        public float GetElementalDamage()
+        {
+            float fireDmg = offenseStats.fireDmg.GetValue();
+            float iceDmg = offenseStats.iceDmg.GetValue();
+            float staticDmg = offenseStats.lightningDmg.GetValue();
+            // bonus 1 point per 1 point of int
+            float bonusEleDmg = majorStats.intelligence.GetValue();
+            
+            float highestDmg = Mathf.Max(fireDmg, iceDmg, staticDmg);
             // the other values that are not max give bonus eleDmg
             // equal to 50% of their value
             float bonusFireDmg = (Mathf.Approximately(fireDmg, highestDmg)) ? 0 : fireDmg * 0.5f;
@@ -115,20 +139,20 @@ namespace EntityStats
 
         public float GetElementalResistance(ElementType element)
         {
-            float baseResistance = 0;
+            float baseResistance;
             // each point of intelligence adds 0.5% resistance
-            float bonusResistance = majorStats.intelligence.GetValue * .5f;
+            float bonusResistance = majorStats.intelligence.GetValue() * .5f;
             
             switch (element)
             {
                 case ElementType.Fire:
-                    baseResistance = defenseStats.fireResistance.GetValue;
+                    baseResistance = defenseStats.fireResistance.GetValue();
                     break;
                 case ElementType.Ice:
-                    baseResistance = defenseStats.iceResistance.GetValue;
+                    baseResistance = defenseStats.iceResistance.GetValue();
                     break;
                 case ElementType.Lightning:
-                    baseResistance = defenseStats.lightningResistance.GetValue;
+                    baseResistance = defenseStats.lightningResistance.GetValue();
                     break;
                 default:
                 case ElementType.None:
@@ -139,6 +163,40 @@ namespace EntityStats
             const float resistanceCap = 75f;
             float finalResistance = Mathf.Clamp(eleResistance, 0f, resistanceCap) / 100;
             return finalResistance;
+        }
+
+        public Stat GetStatByType(StatType type)
+        {
+            switch (type)
+            {
+                case StatType.MaxHealth: return baseStats.maxHealth;
+                case StatType.HealthRegen: return baseStats.healthRegen;
+                case StatType.MaxMana: return baseStats.maxMana;
+                case StatType.ManaRegen: return baseStats.manaRegen;
+                case StatType.MaxStamina: return baseStats.maxStamina;
+                case StatType.StaminaRegen: return baseStats.staminaRegen;
+                case StatType.Strength: return majorStats.strength;
+                case StatType.Agility: return majorStats.agility;
+                case StatType.Intelligence: return majorStats.intelligence;
+                case StatType.Vitality: return majorStats.vitality;
+                case StatType.AttackSpeed: return offenseStats.attackSpeed;
+                case StatType.Damage: return offenseStats.damage;
+                case StatType.CritPower: return offenseStats.critPower;
+                case StatType.CritChance: return offenseStats.critChance;
+                case StatType.ArmorReduction: return offenseStats.armorPenetration;
+                case StatType.FireDamage: return offenseStats.fireDmg;
+                case StatType.IceDamage: return offenseStats.iceDmg;
+                case StatType.LightningDamage: return offenseStats.lightningDmg;
+                case StatType.Armor: return defenseStats.armor;
+                case StatType.Evasion: return defenseStats.evasion;
+                case StatType.FireResistance: return defenseStats.fireResistance;
+                case StatType.IceResistance: return defenseStats.iceResistance;
+                case StatType.LightningResistance: return defenseStats.lightningResistance;
+                    break;
+                default:
+                    Debug.LogWarning($"StatType {type} not implemented so far.");
+                    return null;
+            }
         }
     }
 }

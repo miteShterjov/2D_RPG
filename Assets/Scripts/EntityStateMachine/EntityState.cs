@@ -1,3 +1,4 @@
+using EntityStats;
 using UnityEngine;
 
 namespace EntityStateMachine
@@ -9,9 +10,12 @@ namespace EntityStateMachine
 
         protected Animator Anim;
         protected Rigidbody2D Rb;
+        protected GeneralStats generalStats;
 
         protected float stateTimer;
         protected bool TriggerCalled;
+        
+        private static readonly int AttackSpeedMultiplier = Animator.StringToHash("attackSpeedMultiplier");
 
         protected EntityState(StateMachine stateMachine, string animBoolName)
         {
@@ -42,5 +46,11 @@ namespace EntityStateMachine
         public void CallAnimTrigger() => TriggerCalled = true;
 
         protected virtual void UpdateAnimationParams() {}
+
+        protected void SyncAttackSpeed()
+        {
+            float attackSpeed = generalStats.offenseStats.attackSpeed.GetValue();
+            Anim.SetFloat(AttackSpeedMultiplier, attackSpeed);
+        }
     }
 }

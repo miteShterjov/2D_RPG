@@ -6,6 +6,8 @@ namespace EntityStats
     [Serializable]
     public class OffenseStatsGroup
     {
+        public Stat attackSpeed;
+        
         public Stat damage;
         public Stat critPower;
         public Stat critChance;

@@ -3,7 +3,7 @@ using EntityStats;
 using Interface;
 using UnityEngine;
 
-namespace Misc
+namespace Objects
 {
     public class Chest : MonoBehaviour, IDamageable
     {
@@ -16,7 +16,11 @@ namespace Misc
         
         private static readonly int OpenChest = Animator.StringToHash("chestOpen");
 
-        public bool TakeDamage(float damage, float elementalDamage, ElementType elementType, Transform damageSource)
+        public bool TakeDamage(
+            float damage, 
+            float elementalDamage, 
+            ElementType elementType, 
+            Transform damageSource)
         {
             vfx?.PlayOnDamageFlashVFX();
             Anim?.SetBool(OpenChest, true);

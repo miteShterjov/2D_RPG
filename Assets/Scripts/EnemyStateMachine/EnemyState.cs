@@ -20,6 +20,7 @@ namespace EnemyStateMachine
             this.Enemy = enemy;
             Rb = enemy.Rb;
             Anim = enemy.Animator;
+            generalStats = enemy.generalStats;
         }
 
         protected override void UpdateAnimationParams()

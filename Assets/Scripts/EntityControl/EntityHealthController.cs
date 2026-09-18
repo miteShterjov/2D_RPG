@@ -8,8 +8,12 @@ namespace EntityControl
     public class EntityHealthController : MonoBehaviour, IDamageable
     {
         [Header("Health")]
-        [SerializeField] private float currentHp;
+        [SerializeField] private float currentHealth;
         [SerializeField] public bool isDead;
+
+        [Header("Health Reget")] [SerializeField]
+        private float regenInterval = 1;
+        [SerializeField] private bool canRegen = true;
         
         private GeneralStats generalStats;
         private EntityVFX entityVFX;
@@ -24,8 +28,9 @@ namespace EntityControl
 
         protected virtual void Start()
         {
-            currentHp = generalStats.GetMaxHealth();
+            currentHealth = generalStats.GetMaxHealth();
             UpdateHealthBar();
+            InvokeRepeating(nameof(RegenHealth), 0, regenInterval);
         }
 
         public virtual bool TakeDamage(
@@ -51,13 +56,32 @@ namespace EntityControl
             ReduceHealth(physicalDmg + eleDmgTaken);
             return true;
         }
+
+        public void IncreaseHealth(float regenAmount)
+        {
+            if (isDead) return;
+
+            float newHealth = currentHealth + regenAmount;
+            float maxHealth = generalStats.GetMaxHealth();
+            
+            currentHealth = Mathf.Min(newHealth, maxHealth);
+            UpdateHealthBar();
+        }
         
         public void ReduceHealth(float damage)
         {
             entityVFX?.PlayOnDamageFlashVFX();
-            currentHp = Mathf.Max(0f, currentHp - Mathf.Max(0f, damage));
+            currentHealth = Mathf.Max(0f, currentHealth - Mathf.Max(0f, damage));
             UpdateHealthBar();
-            if (currentHp <= 0) DoDeathSequence();
+            if (currentHealth <= 0) DoDeathSequence();
+        }
+
+        private void RegenHealth()
+        {
+            if (!canRegen) return;
+            
+            float regenAmount = generalStats.baseStats.healthRegen.GetValue();
+            IncreaseHealth(regenAmount);
         }
 
         private bool IsAttackEvaded() => Random.Range(0, 100) < generalStats.GetEvasion();
@@ -65,7 +89,7 @@ namespace EntityControl
         private void UpdateHealthBar()
         {
             if (healthBar == null) return;
-            healthBar.value = generalStats.GetMaxHealth() > 0f ? currentHp / generalStats.GetMaxHealth() : 0f;
+            healthBar.value = generalStats.GetMaxHealth() > 0f ? currentHealth / generalStats.GetMaxHealth() : 0f;
         }
 
         private void DoDeathSequence()

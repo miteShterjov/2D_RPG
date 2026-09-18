@@ -24,6 +24,8 @@ namespace PlayerStateMachine
         {
             base.Enter();
             _comboAttackQueued = false;
+
+            SyncAttackSpeed();
     
             if (Player.playerMove.MoveInput.x != 0) _attackDir = ((int)Player.playerMove.MoveInput.x);
             else _attackDir = Player.playerMove.FacingDir;

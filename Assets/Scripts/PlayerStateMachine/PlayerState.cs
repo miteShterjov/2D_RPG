@@ -20,6 +20,7 @@ namespace PlayerStateMachine
         
             Anim = player.Animator;
             Rb = player.playerMove.rb;
+            generalStats = player.generalStats;
         }
 
         public override void Update()
