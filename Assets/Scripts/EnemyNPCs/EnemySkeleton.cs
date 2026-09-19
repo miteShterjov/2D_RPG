@@ -6,6 +6,7 @@ namespace EnemyNPCs
 {
     public class EnemySkeleton : EnemyController, ICounterable
     {
+        
         public bool CanBeCountered => cabBeStunned;
 
         private const string IdleAnimConst = "idle";

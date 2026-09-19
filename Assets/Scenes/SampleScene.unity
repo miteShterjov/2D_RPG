@@ -376,10 +376,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b881aaa56c4efea2d056b5438e402d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityStats.EntityStats
+  defaultStatSetup: {fileID: 11400000, guid: c5b9d08ead6d848a08a0a45b229db197, type: 2}
   elementType: 0
   baseStats:
     maxHealth:
-      baseValue: 2000
+      baseValue: 60
       modifiers: []
     healthRegen:
       baseValue: 0
@@ -407,23 +408,23 @@ MonoBehaviour:
       baseValue: 0
       modifiers: []
     vitality:
-      baseValue: 10
+      baseValue: 0
       modifiers: []
   offenseStats:
     attackSpeed:
-      baseValue: 1
+      baseValue: 1.25
       modifiers: []
     damage:
-      baseValue: 150
+      baseValue: 14
       modifiers: []
     critPower:
-      baseValue: 0
+      baseValue: 145
       modifiers: []
     critChance:
-      baseValue: 0
+      baseValue: 8
       modifiers: []
     armorPenetration:
-      baseValue: 0
+      baseValue: 10
       modifiers: []
     fireDmg:
       baseValue: 0
@@ -436,16 +437,16 @@ MonoBehaviour:
       modifiers: []
   defenseStats:
     armor:
-      baseValue: 0
+      baseValue: 5
       modifiers: []
     evasion:
       baseValue: 0
       modifiers: []
     fireResistance:
-      baseValue: 0
+      baseValue: -20
       modifiers: []
     iceResistance:
-      baseValue: 0
+      baseValue: 25
       modifiers: []
     lightningResistance:
       baseValue: 0
@@ -5325,6 +5326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b881aaa56c4efea2d056b5438e402d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityStats.EntityStats
+  defaultStatSetup: {fileID: 0}
   elementType: 0
   baseStats:
     maxHealth:

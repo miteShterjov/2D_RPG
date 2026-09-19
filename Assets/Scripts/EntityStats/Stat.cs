@@ -51,6 +51,8 @@ namespace EntityStats
             modifiers.RemoveAll(m => m.source == source);
             needsRecalculation = true;
         } 
+        
+        public void SetBaseValue(float value) => baseValue = value;
     }
 
     [Serializable]
