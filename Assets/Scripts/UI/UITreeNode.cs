@@ -1,0 +1,63 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+namespace UI
+{
+    public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+    {
+        [Header("Skill Points")]
+        [SerializeField] private Image skillIcon;
+        [SerializeField] private Color lockedColor;
+
+        private Color lastColor;
+        private const string LockedColorHexString = "#9F9797";
+
+        public bool isUnlocked;
+        public bool isLocked;
+
+        private void Awake()
+        {
+            UpdateSkillIconColor(GetColorFromHex(LockedColorHexString));
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {   
+            if (isUnlocked) return;
+            UpdateSkillIconColor(Color.white * 0.9f);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (isUnlocked) return;
+            UpdateSkillIconColor(lastColor);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (CanBeUnlocked()) UnlockSkillPoint();
+            else Debug.Log("Skill point cannot be unlocked!");
+        }
+
+        private bool CanBeUnlocked()
+        {
+            if (isLocked || isUnlocked) return false;
+            else return true;
+        }
+
+        private void UnlockSkillPoint()
+        {
+            isUnlocked = true;
+            UpdateSkillIconColor(Color.white);
+        }
+
+        private void UpdateSkillIconColor(Color color)
+        {
+            if (!skillIcon) return;
+            lastColor = skillIcon.color;
+            skillIcon.color = color;
+        }
+        
+        private Color GetColorFromHex(string hex) => ColorUtility.TryParseHtmlString(hex, out Color color) ? color : Color.white;
+    }
+}
