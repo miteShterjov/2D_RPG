@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c511c84cab69bf9358e7807934dd417b, type: 3}
+  m_Name: Skill Data - Healing Wisp
+  m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDataSO
+  skillCost: 2
+  skillName: Healing Wisp
+  description: 'When the time echo dies from enemy attacks, it releases a healing
+    wisp that moves towards your and heals you on contact. '
+  icon: {fileID: -1175930857, guid: 1c6a03e1e81a229f9a32a0c9925abc9c, type: 3}
