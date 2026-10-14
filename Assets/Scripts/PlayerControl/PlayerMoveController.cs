@@ -1,4 +1,5 @@
 using EntityControl;
+using UI;
 using UnityEngine;
 
 namespace PlayerControl
@@ -17,10 +18,13 @@ namespace PlayerControl
         [SerializeField] public Vector2 wallJumpAngle = new Vector2(6f, 12f);
         [SerializeField] [Range(0, 1)] private float inAirMoveMultiplier;
         [SerializeField] [Range(0, 1)] public float wallSlideSlowMultiplier;
+        
+        private UIHandler uiHandler;
 
         protected override void Awake()
         {
             base.Awake();
+            uiHandler = FindAnyObjectByType<UIHandler>();
             InputActions = new InputSystem_Actions();
         }
         
@@ -29,6 +33,8 @@ namespace PlayerControl
             InputActions.Enable();
             InputActions.Player.Move.performed += HandleMovePerformed;
             InputActions.Player.Move.canceled += HandleMoveCanceled;
+
+            InputActions.Player.ToggleSkillTreeUI.performed += context => uiHandler.ToggleSkillTree();
         }
         
         private void OnDisable()

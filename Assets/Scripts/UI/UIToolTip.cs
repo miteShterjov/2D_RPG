@@ -9,7 +9,7 @@ namespace UI
         
         private RectTransform rectTransform;
         
-        private void Awake()
+        protected virtual void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
         }
@@ -42,5 +42,7 @@ namespace UI
             
             this.rectTransform.position = targetPosition;
         }
+        
+        protected static string GetColoredText(string color, string text) => $"<color={color}>{text}</color>";
     }
 }
