@@ -1,4 +1,5 @@
 using System;
+using PlayerControl;
 using UnityEngine;
 
 namespace UI
@@ -8,6 +9,12 @@ namespace UI
         [ Header("Skill Tree")]
         [SerializeField] private int skillPoints;
         [SerializeField] private UITreeConnectionHandler[] parentNodes;
+        public PlayerSkillsManager SkillsManager;
+
+        private void Awake()
+        {
+            SkillsManager = FindAnyObjectByType<PlayerSkillsManager>();
+        }
 
         private void Start()
         {

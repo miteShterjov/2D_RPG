@@ -17,11 +17,22 @@ namespace PlayerControl
         public float attackVelocityDuration = 0.1f;
         public float comboAttackResetTime = 1f;
         private Coroutine _queuedAttackCo;
+        
+        #region Player Controllers
 
         public PlayerMoveController playerMove;
         public PlayerCollisionController playerCollision;
         public PlayerCombatController playerCombat;
+        public PlayerHealthController playerHealth;
+        
+        public EntityStatusHandler statusHandler;
+        public PlayerSkillsManager skillsManager;
+        public PlayerVFX playerVFX;
+        
+        #endregion
 
+        #region  PlayerStates
+        
         public PlayerIdleState IdleState;
         public PlayerMoveState MoveState;
         public PlayerJumpState JumpState;
@@ -32,7 +43,12 @@ namespace PlayerControl
         public PlayerBasicAttackState BasicAttackState;
         public PLayerJumpAttackState JumpAttackState;
         public PlayerCounterAttack CounterAttack;
+        public PlayerSwordThrowState SwordThrowState;
         private PlayerDeathState deathState;
+
+        #endregion
+
+        #region AnimStringParams
 
         private const string IdleAnimConst = "idle";
         private const string MoveAnimConst = "move";
@@ -43,10 +59,16 @@ namespace PlayerControl
         private const string JumpAttackAnimConst = "jumpAttack";
         private const string DeathAnimConst = "death";
         private const string CounterAttackAnimConst = "counterAttack";
+        private const string SwordThrowAnimConst = "swordThrow";
+        
+        #endregion
         
         protected override void Awake()
         {
             base.Awake();
+            statusHandler = GetComponent<EntityStatusHandler>();
+            skillsManager = GetComponent<PlayerSkillsManager>();
+            playerVFX = GetComponent<PlayerVFX>();
 
             StateMachine = new StateMachine();
 
@@ -99,6 +121,7 @@ namespace PlayerControl
             playerMove = GetComponent<PlayerMoveController>();
             playerCollision = GetComponent<PlayerCollisionController>();
             playerCombat = GetComponent<PlayerCombatController>();
+            playerHealth = GetComponent<PlayerHealthController>();
         }
         
         private void InitPlayerStates()
@@ -114,6 +137,7 @@ namespace PlayerControl
             JumpAttackState = new PLayerJumpAttackState(this, StateMachine, JumpAttackAnimConst);
             deathState = new PlayerDeathState(this, StateMachine, DeathAnimConst);
             CounterAttack = new PlayerCounterAttack(this, StateMachine, CounterAttackAnimConst);
+            SwordThrowState = new PlayerSwordThrowState(this, StateMachine, SwordThrowAnimConst);
         }
     }
 }

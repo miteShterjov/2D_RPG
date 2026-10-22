@@ -38,6 +38,11 @@ namespace PlayerStateMachine
             {
                 StateMachine.ChangeState(Player.CounterAttack);
             }
+
+            if (Player.playerMove.InputActions.Player.RangeAttack.WasPressedThisFrame())
+            {
+                StateMachine.ChangeState(Player.SwordThrowState);
+            }
         }
     }
 }

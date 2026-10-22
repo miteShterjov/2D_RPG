@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using SkillSystem;
@@ -108,6 +107,8 @@ namespace UI
             LockConflictedNodes();
             skillTree.SpendSkillPoints(skillData.skillCost);
             connectionHandler.ConnectionImageUnlocked(true);
+
+            skillTree.SkillsManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData.upgradeData);
         }
 
         private void UpdateSkillIconColor(Color color)

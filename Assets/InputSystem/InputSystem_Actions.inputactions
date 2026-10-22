@@ -97,13 +97,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ToggleSkillTreeUI",
+                    "name": "RangeAttack",
                     "type": "Button",
                     "id": "dd3c2891-f893-46f8-85de-987dc7e9d66a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MouseAim",
+                    "type": "Value",
+                    "id": "069c4eec-4e09-4cf2-b9ed-c162f851df2b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -527,17 +536,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f238ec5d-6037-4264-963e-b78bfbae12f5",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Counter Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "dfd9776c-f9bc-4c50-9e52-1e4f8e1c4a35",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -550,11 +548,22 @@
                 {
                     "name": "",
                     "id": "f8464659-d8fe-47db-ac96-b4ff2549bb08",
-                    "path": "<Keyboard>/n",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "ToggleSkillTreeUI",
+                    "action": "RangeAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b0134836-7493-4e80-bcc1-b3e41aa1b846",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MouseAim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -650,6 +659,15 @@
                     "type": "PassThrough",
                     "id": "9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleSkillTreeUI",
+                    "type": "Button",
+                    "id": "32e5bc4a-1de3-4f60-8cde-aaca442a4de0",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -1071,6 +1089,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0790352-9cc0-4bb2-91c9-75d6caf3d49a",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ToggleSkillTreeUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

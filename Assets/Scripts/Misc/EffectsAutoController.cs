@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Misc
 {
@@ -20,10 +22,21 @@ namespace Misc
         [Space]
         [SerializeField] private float yMinOffset = -0.3f;
         [SerializeField] private float yMaxOffset = 0.3f;
+        [Header("Fade Effect")]
+        [SerializeField] private bool canFade;
+        [SerializeField] private float fadeSpeed = 1f;
         
+        private SpriteRenderer spriteRenderer;
+
+        private void Awake()
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
 
         private void Start()
         {
+            if (canFade) StartCoroutine(FadeEffectCo());
+            
             ApplyRandomOffset();
             ApplyRandomRotation();
             
@@ -46,6 +59,20 @@ namespace Misc
             
             float zRotation = Random.Range(minRotation, maxRotation);
             transform.Rotate(0f, 0f, zRotation);
+        }
+
+        private IEnumerator FadeEffectCo()
+        {
+            Color targetColor = Color.white;
+            
+            while (targetColor.a > 0)
+            {
+                targetColor.a -= fadeSpeed * Time.deltaTime;
+                spriteRenderer.color = targetColor;
+                yield return null;
+            }
+
+            spriteRenderer.color = targetColor;
         }
     }
 }

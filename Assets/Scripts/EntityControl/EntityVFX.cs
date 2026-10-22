@@ -21,8 +21,9 @@ namespace EntityControl
         [SerializeField] private Color fireHitEffectColor = Color.orangeRed;
         [SerializeField] private Color thunderHitEffectColor = Color.softYellow;
     
+        protected SpriteRenderer spriteRenderer;
+        
         private Material originalMaterial;                                                                                            
-        private SpriteRenderer spriteRenderer;
         
         private EntityMoveController entityMove;
     

@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: 408853671357599359}
   - component: {fileID: 2004350872917850281}
   - component: {fileID: 4044141020632980510}
-  - component: {fileID: 4662878137358741561}
   - component: {fileID: 4976343343824497588}
   - component: {fileID: 2820904889973489896}
+  - component: {fileID: 7716777381641446503}
+  - component: {fileID: 5439865682188177034}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -39,6 +40,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9149779312022918341}
   - {fileID: 5923046256328327210}
   - {fileID: 2877779152174619305}
   - {fileID: 1330586724471789827}
@@ -135,6 +137,9 @@ MonoBehaviour:
   playerMove: {fileID: 408853671357599359}
   playerCollision: {fileID: 6842785540670126196}
   playerCombat: {fileID: 2004350872917850281}
+  playerHealth: {fileID: 0}
+  statusHandler: {fileID: 0}
+  skillsManager: {fileID: 0}
 --- !u!114 &6842785540670126196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,28 +223,6 @@ MonoBehaviour:
   isDead: 0
   regenInterval: 1
   canRegen: 1
---- !u!114 &4662878137358741561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2005763780351287126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ca4c81b86f0782a89280af88fff133, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Entity_VFX
-  onDamageMaterial: {fileID: 2100000, guid: 993ba2b842db649edad0eb0445b35384, type: 2}
-  onDamageDuration: 0.15
-  knockbackForce: {x: 0, y: 0}
-  knockbackDuration: 0.4
-  onHitEffectColor: {r: 1, g: 0.7921569, b: 0.03137255, a: 1}
-  onHitPrefab: {fileID: 1606242323058815732, guid: 32f0f9ae1bfb83337b59a9d25bb03643, type: 3}
-  critPrefab: {fileID: 2798733362475089186, guid: 17476c44792a9c0b3abab89e161739f4, type: 3}
-  iceHitEffectColor: {r: 0, g: 1, b: 1, a: 1}
-  fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
-  thunderHitEffectColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
 --- !u!114 &4976343343824497588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +325,40 @@ MonoBehaviour:
   thunderStrikeEffectPrefab: {fileID: 5736791690567695365, guid: 70383a71ac6d01ea3b378526dbfb66d2, type: 3}
   currentCharge: 0
   maxCharges: 1
+--- !u!114 &7716777381641446503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005763780351287126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbe2b19c32104231a9bc2819d5f2ed98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControl.PlayerSkillsManager
+--- !u!114 &5439865682188177034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005763780351287126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f14cf0de8c04de087a69ac8419bc1be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControl.PlayerVFX
+  onDamageMaterial: {fileID: 2100000, guid: 993ba2b842db649edad0eb0445b35384, type: 2}
+  onDamageDuration: 0.2
+  knockbackForce: {x: 1.5, y: 2.5}
+  knockbackDuration: 0.4
+  onHitEffectColor: {r: 1, g: 0.7921569, b: 0.03137255, a: 1}
+  onHitPrefab: {fileID: 1606242323058815732, guid: 32f0f9ae1bfb83337b59a9d25bb03643, type: 3}
+  critPrefab: {fileID: 2798733362475089186, guid: 17476c44792a9c0b3abab89e161739f4, type: 3}
+  iceHitEffectColor: {r: 0, g: 1, b: 1, a: 1}
+  fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
+  thunderHitEffectColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
 --- !u!1 &3745823865213687573
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +579,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4663950104954534451}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8929439162964495453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9149779312022918341}
+  - component: {fileID: 2628244492217991558}
+  m_Layer: 8
+  m_Name: SkillHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9149779312022918341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929439162964495453}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4663950104954534451}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2628244492217991558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929439162964495453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3825813a9224616b5c0877947e23e59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDash
+  skillType: 0
+  upgradeType: 0
+  cooldown: 2
 --- !u!1001 &1851318995167856733
 PrefabInstance:
   m_ObjectHideFlags: 0

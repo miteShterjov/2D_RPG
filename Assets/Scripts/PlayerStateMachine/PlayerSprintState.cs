@@ -18,6 +18,9 @@ namespace PlayerStateMachine
         public override void Enter()
         {
             base.Enter();
+            skillsManager.Sprint.OnStartEffect();
+            Player.playerVFX.DoImageEchoEffect(Player.playerMove.sprintDuration);
+            
             stateTimer = Player.playerMove.sprintDuration;
             
             _originalGravityScale = Player.playerMove.rb.gravityScale;
@@ -44,6 +47,7 @@ namespace PlayerStateMachine
         public override void Exit()
         {
             base.Exit();
+            skillsManager.Sprint.OnEndEffect();
             Player.playerMove.SetVelocity(Vector2.zero);
             Player.playerMove.rb.gravityScale = _originalGravityScale;
         }

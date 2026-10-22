@@ -7,6 +7,7 @@ namespace PlayerControl
     public class PlayerMoveController : EntityMoveController
     {
         public Vector2 MoveInput { get; private set;}
+        public Vector2 MousePosition { get; set;}
         public InputSystem_Actions InputActions { get; private set; }
         public float JumpForce => jumpForce;
         public float InAirMoveMultiplier => inAirMoveMultiplier;
@@ -33,8 +34,10 @@ namespace PlayerControl
             InputActions.Enable();
             InputActions.Player.Move.performed += HandleMovePerformed;
             InputActions.Player.Move.canceled += HandleMoveCanceled;
+            
+            InputActions.Player.MouseAim.performed += ctx => MousePosition = ctx.ReadValue<Vector2>();
 
-            InputActions.Player.ToggleSkillTreeUI.performed += context => uiHandler.ToggleSkillTree();
+            InputActions.UI.ToggleSkillTreeUI.performed += context => uiHandler.ToggleSkillTree();
         }
         
         private void OnDisable()

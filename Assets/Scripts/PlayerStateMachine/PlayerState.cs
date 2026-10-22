@@ -7,6 +7,7 @@ namespace PlayerStateMachine
     public abstract class PlayerState : EntityState
     {
         protected readonly PlayerController Player;
+        protected readonly PlayerSkillsManager skillsManager;
         
         private static readonly int YVelocity = Animator.StringToHash("yVelocity");
 
@@ -21,13 +22,18 @@ namespace PlayerStateMachine
             Anim = player.Animator;
             Rb = player.playerMove.rb;
             generalStats = player.generalStats;
+            skillsManager = Player.skillsManager;
         }
 
         public override void Update()
         {
             base.Update();
          
-            if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame() && CanSprint()) StateMachine.ChangeState(Player.SprintState);
+            if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame() && CanSprint())
+            {
+                skillsManager.Sprint.SetSkillOnCooldown();
+                StateMachine.ChangeState(Player.SprintState);
+            }
         }
 
         protected override void UpdateAnimationParams()
@@ -38,6 +44,7 @@ namespace PlayerStateMachine
 
         private bool CanSprint()
         {
+            if (!skillsManager.Sprint.CanUseSkill()) return false;
             if (Player.playerCollision.IsWallDetected) return false;
             if (StateMachine.CurrentState == Player.SprintState) return false;
             return true;

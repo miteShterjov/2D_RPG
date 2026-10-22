@@ -59,7 +59,7 @@ namespace EntityControl
             OnFlip?.Invoke(facingDir);
         }
         
-        private void HandleFlipEntitySprite(float xVelocity)
+        public void HandleFlipEntitySprite(float xVelocity)
         {
             if (xVelocity > 0 && !isFacingRight || xVelocity < 0 && isFacingRight) FlipEntitySprite();
         }
