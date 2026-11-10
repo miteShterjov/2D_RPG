@@ -72,16 +72,27 @@ namespace UI
             
             foreach (UITreeNode node in neededNodes)
             {
+                if (node == null || node.skillData == null)
+                {
+                    Debug.LogWarning("Null node or skillData in neededNodes", this);
+                    continue;
+                }
                 string nodeColor = node.isUnlocked ? metConditionsHexColor : unmetConditionsHexColor;
                 sb.AppendLine($"<color={nodeColor}> -{node.skillData.skillName}.</color>");
             }
 
-            if (conflictingNodes != null)
+            if (conflictingNodes is { Length: > 0 })
             {
                 sb.AppendLine();
                 sb.AppendLine($"<color={importantInfoColor}>Locks out following skill(s):</color>");
+
                 foreach (UITreeNode node in conflictingNodes)
                 {
+                    if (node == null || node.skillData == null)
+                    {
+                        Debug.LogWarning("Null node or skillData in conflictingNodes", this);
+                        continue;
+                    }
                     sb.AppendLine($"<color={importantInfoColor}> - {node.skillData.skillName}.</color>");
                 }
             }

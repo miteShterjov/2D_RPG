@@ -7,6 +7,7 @@ namespace SkillSystem
     public class SkillDataSO : ScriptableObject
     {
         public int skillCost;
+        public bool isUnlockedByDefault;
         public SkillType skillType;
         //public SkillUpgradeType upgradeType;
         public UpgradeData upgradeData;

@@ -17,6 +17,6 @@ MonoBehaviour:
   upgradeData:
     upgradeType: 2
     cooldown: 2
-  skillName: ' Deja Vu'
+  skillName: Deja Vu
   description: Create a time echo on arrival from sprinting. (Echo inherits all upgrades).
   icon: {fileID: 326309838, guid: 1c6a03e1e81a229f9a32a0c9925abc9c, type: 3}

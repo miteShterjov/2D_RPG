@@ -43,7 +43,8 @@ namespace EntityControl
             if (IsAttackEvaded()) return false;
             if (!damageSource) return false;
 
-            float armorPenetration = damageSource.GetComponent<GeneralStats>().GetArmorPenetration();
+            GeneralStats attackerStats = damageSource.GetComponentInParent<GeneralStats>();
+            float armorPenetration = attackerStats != null ? attackerStats.GetArmorPenetration() : 0f;
             float armorMitigation = generalStats.GetArmorMitigation(armorPenetration);
            
             float eleResistance = generalStats.GetElementalResistance(elementType);
@@ -57,14 +58,11 @@ namespace EntityControl
             return true;
         }
 
-        public void IncreaseHealth(float regenAmount)
+        public float GetHealthPercentage() => currentHealth / generalStats.GetMaxHealth();
+        
+        public void SetHealthToPercentage(float percentage) 
         {
-            if (isDead) return;
-
-            float newHealth = currentHealth + regenAmount;
-            float maxHealth = generalStats.GetMaxHealth();
-            
-            currentHealth = Mathf.Min(newHealth, maxHealth);
+            currentHealth = generalStats.GetMaxHealth() * Mathf.Clamp01(percentage);
             UpdateHealthBar();
         }
         
@@ -74,6 +72,17 @@ namespace EntityControl
             currentHealth = Mathf.Max(0f, currentHealth - Mathf.Max(0f, damage));
             UpdateHealthBar();
             if (currentHealth <= 0) DoDeathSequence();
+        }
+        
+        private void IncreaseHealth(float regenAmount)
+        {
+            if (isDead) return;
+
+            float newHealth = currentHealth + regenAmount;
+            float maxHealth = generalStats.GetMaxHealth();
+            
+            currentHealth = Mathf.Min(newHealth, maxHealth);
+            UpdateHealthBar();
         }
 
         private void RegenHealth()

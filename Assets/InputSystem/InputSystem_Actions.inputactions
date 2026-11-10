@@ -113,6 +113,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "SpellCast",
+                    "type": "Button",
+                    "id": "8ddacb86-479a-4dcf-a52e-97f0798643cf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -564,6 +573,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MouseAim",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d32d01fd-a3c9-4353-b3d8-9cfec2ab0658",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SpellCast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

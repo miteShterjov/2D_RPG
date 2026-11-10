@@ -4,14 +4,14 @@ namespace SkillSystem
     {
         public void OnStartEffect()
         {
-            if (UpgradeIsUnlocked(SkillUpgradeType.Sprint_CloneOnStart) ||
-                UpgradeIsUnlocked(SkillUpgradeType.Sprint_CloneOnStartAndArrival))
+            if (UpgradeIsUnlocked(SkillUpgradeType.SprintCloneOnStart) ||
+                UpgradeIsUnlocked(SkillUpgradeType.SprintCloneOnStartAndArrival))
             {
                 CreateClone();
             }
             
-            if (UpgradeIsUnlocked(SkillUpgradeType.Sprint_ShardOnStart) ||
-                UpgradeIsUnlocked(SkillUpgradeType.Sprint_ShardOnStartAndArrival))
+            if (UpgradeIsUnlocked(SkillUpgradeType.SprintShardOnStart) ||
+                UpgradeIsUnlocked(SkillUpgradeType.SprintShardOnStartAndArrival))
             {
                 CreateShard();
             }
@@ -19,8 +19,8 @@ namespace SkillSystem
 
         public void OnEndEffect()
         {
-            if (UpgradeIsUnlocked(SkillUpgradeType.Sprint_CloneOnStartAndArrival)) CreateClone();
-            if (UpgradeIsUnlocked(SkillUpgradeType.Sprint_ShardOnStartAndArrival)) CreateShard();
+            if (UpgradeIsUnlocked(SkillUpgradeType.SprintCloneOnStartAndArrival)) CreateClone();
+            if (UpgradeIsUnlocked(SkillUpgradeType.SprintShardOnStartAndArrival)) CreateShard();
         }
         
         private static void CreateShard()

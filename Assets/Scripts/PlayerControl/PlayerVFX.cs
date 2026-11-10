@@ -10,6 +10,7 @@ namespace PlayerControl
         [Range(.01f, .02f)] 
         [SerializeField] private float imageEchoInterval = .05f;
         [SerializeField] private GameObject imageEchoPrefab;
+        [SerializeField] private float imageEchoLifetime = .5f;
 
         private Coroutine imageEchoCo;
 
@@ -29,15 +30,13 @@ namespace PlayerControl
                 yield return new WaitForSeconds(imageEchoInterval);
                 time += imageEchoInterval;
             }
-            
-            Destroy(imageEchoPrefab);
         }
 
         private void CreateImageEcho()
         {
             GameObject imageEcho = Instantiate(imageEchoPrefab, transform.position, Quaternion.identity);
             imageEcho.GetComponentInChildren<SpriteRenderer>().sprite = spriteRenderer.sprite;
+            Destroy(imageEcho, imageEchoLifetime);
         }
-
     }
 }

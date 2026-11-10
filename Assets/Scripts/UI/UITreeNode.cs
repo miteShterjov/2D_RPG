@@ -40,6 +40,11 @@ namespace UI
             UpdateSkillIconColor(GetColorFromHex(LockedColorHexString));
         }
         
+        private void Start()
+        {
+            if (skillData.isUnlockedByDefault) UnlockSkillPoint();
+        }
+        
         private void OnValidate()
         {
             if (!skillData) return;
@@ -78,6 +83,16 @@ namespace UI
             UpdateSkillIconColor(GetColorFromHex(LockedColorHexString));
             skillTree.AddSkillPoints(skillData.skillCost);
             connectionHandler.ConnectionImageUnlocked(false);
+        }
+
+        public void LockChildNodes()
+        {
+             isLocked = true;
+
+             foreach (UITreeNode node in connectionHandler.GetAllChildNodes())
+             {
+                 node.LockChildNodes();
+             }
         }
 
         private void OnDisable()
@@ -134,6 +149,7 @@ namespace UI
             foreach (UITreeNode conflictedNode in conflictedNodes)
             {
                 conflictedNode.isLocked = true;
+                conflictedNode.LockChildNodes();
                 UpdateSkillIconColor(lockedColor);
             }
         }

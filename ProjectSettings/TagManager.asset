@@ -60,6 +60,9 @@ TagManager:
   - name: TreeNodeIcon
     uniqueID: 1785818585
     locked: 0
+  - name: UI
+    uniqueID: 3700479827
+    locked: 0
   m_RenderingLayers:
   - Default
   m_MigratedRenderPipelines: []

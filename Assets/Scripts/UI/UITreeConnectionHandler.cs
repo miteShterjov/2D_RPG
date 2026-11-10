@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 #if UNITY_EDITOR
@@ -26,9 +27,8 @@ namespace UI
         private RectTransform rectTransform;
         private Image connectionImage;
         private Color originalColor;
-#if UNITY_EDITOR
+
         private bool validationUpdateScheduled;
-#endif
 
         private void Awake()
         {
@@ -37,15 +37,31 @@ namespace UI
 
         private void OnValidate()
         {
-#if UNITY_EDITOR
             if (validationUpdateScheduled) return;
 
             validationUpdateScheduled = true;
             EditorApplication.delayCall += UpdateConnectionsAfterValidation;
-#endif
+        }
+        
+        public void ConnectionImageUnlocked(bool isUnlocked)
+        {
+            if (!connectionImage) return;
+            connectionImage.color = isUnlocked ? Color.white : originalColor;
         }
 
-#if UNITY_EDITOR
+        public UITreeNode[] GetAllChildNodes()
+        {
+            List<UITreeNode> allChildNodes = new List<UITreeNode>();
+
+            foreach (UITreeConnectionDetails node in connectionDetails)
+            {
+                if (node.childNode != null) 
+                    allChildNodes.Add(node.childNode.GetComponent<UITreeNode>());
+            }
+            
+            return allChildNodes.ToArray();
+        }
+
         private void UpdateConnectionsAfterValidation()
         {
             validationUpdateScheduled = false;
@@ -53,16 +69,9 @@ namespace UI
 
             UpdateConnections();
         }
-#endif
-
-        public void SetConnectionImage(Image image) => connectionImage = image;
-
-        public void ConnectionImageUnlocked(bool isUnlocked)
-        {
-            if (!connectionImage) return;
-            connectionImage.color = isUnlocked ? Color.white : originalColor;
-        }
-
+        
+        private void SetConnectionImage(Image image) => connectionImage = image;
+        
         private bool EnsureRectTransform()
         {
             if (!rectTransform) rectTransform = GetComponent<RectTransform>();
@@ -80,7 +89,7 @@ namespace UI
             rectTransform.localPosition = position;
         }
 
-        public void UpdateConnections()
+        private void UpdateConnections()
         {
             if (!EnsureRectTransform())
             {
@@ -120,7 +129,7 @@ namespace UI
 
                 detail.childNode.SetPosition(targetPosition);
                 detail.childNode.SetConnectionImage(connImg);
-                detail.childNode.transform.SetAsLastSibling();
+                // detail.childNode.transform.SetAsLastSibling();
             }
         }
 

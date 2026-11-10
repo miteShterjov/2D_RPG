@@ -199,6 +199,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SpellCast"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ddacb86-479a-4dcf-a52e-97f0798643cf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -650,6 +659,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""MouseAim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d32d01fd-a3c9-4353-b3d8-9cfec2ab0658"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SpellCast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1269,6 +1289,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_RangeAttack = m_Player.FindAction("RangeAttack", throwIfNotFound: true);
         m_Player_MouseAim = m_Player.FindAction("MouseAim", throwIfNotFound: true);
+        m_Player_SpellCast = m_Player.FindAction("SpellCast", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1375,6 +1396,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_RangeAttack;
     private readonly InputAction m_Player_MouseAim;
+    private readonly InputAction m_Player_SpellCast;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1434,6 +1456,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/MouseAim".
         /// </summary>
         public InputAction @MouseAim => m_Wrapper.m_Player_MouseAim;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/SpellCast".
+        /// </summary>
+        public InputAction @SpellCast => m_Wrapper.m_Player_SpellCast;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1496,6 +1522,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MouseAim.started += instance.OnMouseAim;
             @MouseAim.performed += instance.OnMouseAim;
             @MouseAim.canceled += instance.OnMouseAim;
+            @SpellCast.started += instance.OnSpellCast;
+            @SpellCast.performed += instance.OnSpellCast;
+            @SpellCast.canceled += instance.OnSpellCast;
         }
 
         /// <summary>
@@ -1543,6 +1572,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @MouseAim.started -= instance.OnMouseAim;
             @MouseAim.performed -= instance.OnMouseAim;
             @MouseAim.canceled -= instance.OnMouseAim;
+            @SpellCast.started -= instance.OnSpellCast;
+            @SpellCast.performed -= instance.OnSpellCast;
+            @SpellCast.canceled -= instance.OnSpellCast;
         }
 
         /// <summary>
@@ -1938,6 +1970,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMouseAim(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SpellCast" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpellCast(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

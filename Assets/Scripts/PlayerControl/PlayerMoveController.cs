@@ -22,11 +22,15 @@ namespace PlayerControl
         
         private UIHandler uiHandler;
 
+        private PlayerController playerController;
+
         protected override void Awake()
         {
             base.Awake();
             uiHandler = FindAnyObjectByType<UIHandler>();
             InputActions = new InputSystem_Actions();
+            
+            playerController = GetComponent<PlayerController>();
         }
         
         private void OnEnable()
@@ -35,9 +39,14 @@ namespace PlayerControl
             InputActions.Player.Move.performed += HandleMovePerformed;
             InputActions.Player.Move.canceled += HandleMoveCanceled;
             
-            InputActions.Player.MouseAim.performed += ctx => MousePosition = ctx.ReadValue<Vector2>();
+            InputActions.Player.MouseAim.performed += ctx => 
+                MousePosition = ctx.ReadValue<Vector2>();
 
-            InputActions.UI.ToggleSkillTreeUI.performed += context => uiHandler.ToggleSkillTree();
+            InputActions.UI.ToggleSkillTreeUI.performed += context => 
+                uiHandler.ToggleSkillTree();
+
+            InputActions.Player.SpellCast.performed += ctx => 
+                playerController.skillsManager.Shard.TryUseSkill();
         }
         
         private void OnDisable()
@@ -47,6 +56,8 @@ namespace PlayerControl
             InputActions.Disable();
             MoveInput = Vector2.zero;
         }
+        
+        public void TeleportPlayer(Vector3 position) => transform.position = position;
 
         private void HandleMovePerformed(UnityEngine.InputSystem.InputAction.CallbackContext context)
         {

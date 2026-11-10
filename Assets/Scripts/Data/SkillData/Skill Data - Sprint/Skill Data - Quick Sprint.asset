@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skill Data - Quick Sprint
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDataSO
   skillCost: 0
+  isUnlockedByDefault: 1
   skillType: 0
   upgradeData:
     upgradeType: 2
