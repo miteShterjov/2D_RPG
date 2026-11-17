@@ -13,11 +13,21 @@ MonoBehaviour:
   m_Name: Skill Data - Time Shard
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDataSO
   skillCost: 0
-  isUnlockedByDefault: 1
+  isUnlockedByDefault: 0
   skillType: 2
   upgradeData:
     upgradeType: 6
     cooldown: 1
+    damageScaleData:
+      physicalDamage: 1
+      elementalDamage: 1
+      chillDuration: 3
+      chillSlowMultiplier: 0.2
+      burnDuration: 3
+      burnDamageScale: 1
+      shockDuration: 3
+      shockDamageScale: 1
+      shockChargeScale: 0.4
   skillName: Time Shard
   description: 'Create a time shard filled with elemental magic. The shard will explode
     when touched by an enemy or when time goes up. '

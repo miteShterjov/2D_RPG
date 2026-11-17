@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Data.ElementalEffectData;
 using EntityStats;
 using UnityEngine;
 
@@ -66,6 +68,26 @@ namespace EntityControl
             
             if (electrifyCo != null) StopCoroutine(electrifyCo);
             electrifyCo = StartCoroutine(ElectrifyEffectCo(duration));
+        }
+
+        public void ApplyStatusEffect(ElementType elementType, ElementalEffectData effectData)
+        {
+            switch (elementType)
+            {
+                case ElementType.Ice when CanEffectBeApplied(ElementType.Ice):
+                    ApplyChillEffect(effectData.chillDuration, effectData.chillDuration);
+                    break;
+                case ElementType.Fire when CanEffectBeApplied(ElementType.Fire):
+                    ApplyBurningEffect(effectData.burnDuration, effectData.burnDamage);
+                    break;
+                case ElementType.Lightning when CanEffectBeApplied(ElementType.Lightning):
+                    ApplyLightningEffect(effectData.shockDuration, effectData.shockDamage, effectData.shockCharge);
+                    break;
+                case ElementType.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(elementType), elementType, null);
+            }
         }
         
         public void StopAllStatusEffects()

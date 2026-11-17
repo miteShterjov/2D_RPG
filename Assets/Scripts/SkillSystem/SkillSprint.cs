@@ -23,10 +23,9 @@ namespace SkillSystem
             if (UpgradeIsUnlocked(SkillUpgradeType.SprintShardOnStartAndArrival)) CreateShard();
         }
         
-        private static void CreateShard()
+        private void CreateShard()
         {
-            print("Creating shard");
-            //todo: create shard logic
+            skillsManager.Shard.CreateRawShard();
         }
 
         private static void CreateClone()

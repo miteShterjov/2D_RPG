@@ -16,8 +16,18 @@ MonoBehaviour:
   isUnlockedByDefault: 1
   skillType: 0
   upgradeData:
-    upgradeType: 2
+    upgradeType: 1
     cooldown: 0
+    damageScaleData:
+      physicalDamage: 1
+      elementalDamage: 1
+      chillDuration: 3
+      chillSlowMultiplier: 0.2
+      burnDuration: 3
+      burnDamageScale: 1
+      shockDuration: 3
+      shockDamageScale: 1
+      shockChargeScale: 0.4
   skillName: Quick Sprint
   description: 'Sprint to avoid attacks. You are immune to damage while sprinting. '
   icon: {fileID: -386173118, guid: 1c6a03e1e81a229f9a32a0c9925abc9c, type: 3}

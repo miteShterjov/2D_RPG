@@ -1,5 +1,4 @@
 using System.Collections;
-using EntityControl;
 using UnityEngine;
 
 namespace SkillSystem
@@ -34,7 +33,14 @@ namespace SkillSystem
             if (UpgradeIsUnlocked(SkillUpgradeType.ShardTeleportAndHpRewind)) HandleShardHealthRewind();
         }
 
-        private float GetDetonationTime() => UpgradeIsUnlocked(SkillUpgradeType.ShardTeleport) ? shardExistDuration : detonationTime;
+        public void CreateRawShard()
+        {
+            bool canMove = UpgradeIsUnlocked(SkillUpgradeType.ShardMoveToEnemy) || UpgradeIsUnlocked(SkillUpgradeType.ShardMultiCast);
+            GameObject shard = Instantiate(shardPrefab, transform.position, Quaternion.identity);
+            shard.GetComponent<SkillObjectShard>().SetupShard(this, GetDetonationTime(), canMove, shardSpeed);
+        }
+
+        public float GetDetonationTime() => UpgradeIsUnlocked(SkillUpgradeType.ShardTeleport) ? shardExistDuration : detonationTime;
 
         private void ForceCooldown()
         {
@@ -52,10 +58,9 @@ namespace SkillSystem
 
         private void CreateShard()
         {
-            float boomTime = GetDetonationTime();
             GameObject shard = Instantiate(shardPrefab, transform.position, Quaternion.identity);
             currentShard = shard.GetComponent<SkillObjectShard>();
-            currentShard.SetupShard(boomTime);
+            currentShard.SetupShard(this);
 
             if (UpgradeIsUnlocked(SkillUpgradeType.ShardTeleport)
                 || UpgradeIsUnlocked(SkillUpgradeType.ShardTeleportAndHpRewind))
@@ -85,7 +90,7 @@ namespace SkillSystem
 
         private void HandleShardTeleport()
         {
-            if (!currentShard) CreateShard();
+            if (currentShard == null) CreateShard();
             else
             {
                 SwapPlayerAndShard();
@@ -95,7 +100,7 @@ namespace SkillSystem
 
         private void HandleShardHealthRewind()
         {
-            if (!currentShard)
+            if (currentShard == null)
             {
                 CreateShard();
                 savedHealthPercent = entityHealthController.GetHealthPercentage();

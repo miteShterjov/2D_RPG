@@ -43,14 +43,20 @@ namespace EntityControl
 
         public void PlayOnHitEffect(Transform target, bool isCrit)
         {
-            if (!onHitPrefab) return;
-            if (!critPrefab) return;
+            if (onHitPrefab == null) return;
+            if (critPrefab == null) return;
             
             GameObject hitPrefab = isCrit ? critPrefab : onHitPrefab;
 
             GameObject onHitEffect = Instantiate(hitPrefab, target.position, Quaternion.identity);
             SpriteRenderer effectRenderer = onHitEffect.GetComponentInChildren<SpriteRenderer>();
+            
             if (effectRenderer) effectRenderer.color = onHitEffectColor;
+            else if (effectRenderer == null)
+            {
+                Debug.LogError("No SpriteRenderer found on hit effect prefab");
+                return;
+            }
             if (entityMove != null && entityMove.FacingDir < 0 && isCrit)
                 onHitEffect.transform.Rotate(0, 180, 0);
         }
@@ -68,7 +74,7 @@ namespace EntityControl
             knockbackVFXCoroutine = StartCoroutine(KnockBackVFXCo(direction));
         }
 
-        public void UpdateOnHitEffectColor(ElementType elementType)
+        public Color UpdateOnHitEffectColor(ElementType elementType)
         {
             onHitEffectColor = elementType switch
             {
@@ -78,6 +84,8 @@ namespace EntityControl
                 ElementType.None => originalColor,
                 _ => onHitEffectColor
             };
+            
+            return onHitEffectColor;
         }
 
         public void PlayOnStatusVFX(float duration, ElementType elementType)

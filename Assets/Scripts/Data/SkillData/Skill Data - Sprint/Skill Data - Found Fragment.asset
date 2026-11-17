@@ -13,10 +13,21 @@ MonoBehaviour:
   m_Name: Skill Data - Found Fragment
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDataSO
   skillCost: 3
+  isUnlockedByDefault: 0
   skillType: 0
   upgradeData:
-    upgradeType: 4
-    cooldown: 0
+    upgradeType: 5
+    cooldown: 3
+    damageScaleData:
+      physicalDamage: 1
+      elementalDamage: 1
+      chillDuration: 3
+      chillSlowMultiplier: 0.2
+      burnDuration: 3
+      burnDamageScale: 1
+      shockDuration: 3
+      shockDamageScale: 1
+      shockChargeScale: 0.4
   skillName: Found Fragment
   description: Create a tiny shard on arrival.
   icon: {fileID: 169820725, guid: 1c6a03e1e81a229f9a32a0c9925abc9c, type: 3}

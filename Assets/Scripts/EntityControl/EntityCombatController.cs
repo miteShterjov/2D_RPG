@@ -1,26 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Data.ElementalEffectData;
 using EntityStats;
 using Interface;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace EntityControl
 {
     public class EntityCombatController : MonoBehaviour
     {
-        public Collider2D[] targetColliders; 
+        public Collider2D[] targetColliders;
+        public DamageScaleData basicAttackScale;
         
         [Header("Target detection")]
         [SerializeField] private Transform targetCheck;
         [SerializeField] private float targetCheckRadius;
         [SerializeField] private LayerMask targetMask;
-        [FormerlySerializedAs("statusEffectDuration")]
         [Header("Status Effects Config")]
         [SerializeField] private float statusDefaultDuration = 10f;
         [SerializeField] private float slowSpeedMultiplier = .2f;
         [SerializeField] private float staticChargeBuildUp = .4f;
-        [Space] [SerializeField] private float fireScale = .8f;
+        [Space] 
+        [SerializeField] private float fireScale = .8f;
         [SerializeField] private float lightningScale = 2.5f;
 
         private EntityVFX entityVFX;
@@ -42,18 +43,22 @@ namespace EntityControl
             foreach (Collider2D target in targetColliders)
             {
                 IDamageable damageable = target.GetComponentInParent<IDamageable>();
+                AttackData attackData = generalStats.GetAttackData(basicAttackScale);
+                EntityStatusHandler statusHandler = target.GetComponent<EntityStatusHandler>();
                 
                 if (damageable == null || !hitTargets.Add(damageable)) continue;
-                float eleDmg = generalStats.GetElementalDamage(out ElementType element);
-                bool wasTargetHit = damageable.TakeDamage(
-                    generalStats.GetPhysicalDamage(out bool isCritAttack), 
-                    eleDmg, 
-                    element, 
-                    transform);
+                
+                float physDmg = attackData.physicalDamage;
+                float eleDmg = attackData.elementalDamage;
+                ElementType element = attackData.elementalType;
+                
+                bool wasTargetHit = damageable.TakeDamage(physDmg,eleDmg, element, transform);
+                
                 if (!wasTargetHit) continue;
-                if (element != ElementType.None) ApplyStatusEffect(target.transform, element);
+                if (element != ElementType.None) statusHandler?.ApplyStatusEffect(element, attackData.elementalEffectData);
+                
                 entityVFX?.UpdateOnHitEffectColor(element);
-                entityVFX?.PlayOnHitEffect(target.transform, isCritAttack);
+                entityVFX?.PlayOnHitEffect(target.transform, attackData.isCritical);
             }
         }
         
@@ -61,33 +66,6 @@ namespace EntityControl
         {
             if (slowDownCoroutine != null) StopCoroutine(slowDownCoroutine);
             slowDownCoroutine = StartCoroutine(SlowDownEntityCo(duration, slowMultiplier));
-        }
-
-        private void ApplyStatusEffect(Transform target, ElementType element, float scaleFactor = 1f)
-        {
-            EntityStatusHandler statusHandler = target.GetComponentInParent<EntityStatusHandler>();
-            
-            if (!statusHandler) return;
-
-            switch (element)
-            {
-                case ElementType.Ice when statusHandler.CanEffectBeApplied(ElementType.Ice):
-                    statusHandler.ApplyChillEffect(statusDefaultDuration, slowSpeedMultiplier);
-                    break;
-                case ElementType.Fire when statusHandler.CanEffectBeApplied(ElementType.Fire):
-                    scaleFactor = fireScale;
-                    statusHandler.ApplyBurningEffect(statusDefaultDuration, generalStats.GetElementalDamage());
-                    break;
-                case ElementType.Lightning when statusHandler.CanEffectBeApplied(ElementType.Lightning):
-                    scaleFactor = lightningScale;
-                    statusHandler.ApplyLightningEffect(statusDefaultDuration, generalStats.GetElementalDamage(), staticChargeBuildUp);
-                    break;
-                case ElementType.None:
-                    break;
-                default:
-                    statusHandler.StopAllStatusEffects();
-                    break;
-            }
         }
 
         protected virtual IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)

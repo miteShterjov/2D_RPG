@@ -416,11 +416,35 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
+      propertyPath: elementType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
       propertyPath: baseStats.maxHealth.baseValue
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
+      propertyPath: offenseStats.damage.baseValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
+      propertyPath: offenseStats.iceDmg.baseValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
+      propertyPath: offenseStats.fireDmg.baseValue
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
       propertyPath: baseStats.healthRegen.baseValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
+      propertyPath: offenseStats.lightningDmg.baseValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976343343824497588, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
+      propertyPath: offenseStats.lightningDmg.modifiers.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5439865682188177034, guid: b673104155df5dfb78d7e9aecd5ac3f6, type: 3}
@@ -9498,6 +9522,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillShard
   player: {fileID: 0}
   entityHealthController: {fileID: 0}
+  damageScaleData:
+    physicalDamage: 1
+    elementalDamage: 1
+    chillDuration: 3
+    chillSlowMultiplier: 0.2
+    burnDuration: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockChargeScale: 0.4
+  skillsManager: {fileID: 0}
   skillType: 0
   upgradeType: 0
   cooldown: 0
@@ -10903,6 +10938,7 @@ MonoBehaviour:
   skillData: {fileID: 11400000, guid: 98e0c85be8f65629c86806d312cca8d8, type: 2}
   neededNodes:
   - {fileID: 795995393}
+  - {fileID: 388750081}
   conflictedNodes:
   - {fileID: 144259093}
   isUnlocked: 0
@@ -11078,6 +11114,22 @@ PrefabInstance:
     - target: {fileID: 2300747191548039752, guid: 8b77aa2beb51e7cf583d252795a45aea, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380721954393355336, guid: 8b77aa2beb51e7cf583d252795a45aea, type: 3}
+      propertyPath: thunderHitEffectColor.b
+      value: 0.03137255
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380721954393355336, guid: 8b77aa2beb51e7cf583d252795a45aea, type: 3}
+      propertyPath: thunderHitEffectColor.g
+      value: 0.7921569
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380721954393355336, guid: 8b77aa2beb51e7cf583d252795a45aea, type: 3}
+      propertyPath: thunderHitEffectColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207754157027676060, guid: 8b77aa2beb51e7cf583d252795a45aea, type: 3}
+      propertyPath: baseStats.maxHealth.baseValue
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 7462235925589451772, guid: 8b77aa2beb51e7cf583d252795a45aea, type: 3}
       propertyPath: m_Name
@@ -11510,7 +11562,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1028, y: 219.08932}
+  m_AnchoredPosition: {x: -1513, y: 219.08932}
   m_SizeDelta: {x: 432.18994, y: 477.82135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1623674066
@@ -24704,7 +24756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 166.09497, y: 97.32568}
+  m_AnchoredPosition: {x: 166.09485, y: 97.325714}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1709356634

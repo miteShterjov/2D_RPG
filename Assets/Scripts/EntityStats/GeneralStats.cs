@@ -1,3 +1,4 @@
+using Data.ElementalEffectData;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,6 +12,8 @@ namespace EntityStats
         public OffenseStatsGroup offenseStats;
         public DefenseStatsGroup defenseStats;
         public MajorStatsGroup majorStats;
+        
+        public AttackData GetAttackData(DamageScaleData scaleData) => new AttackData(this, scaleData);
 
         public float GetMaxHealth()
         {
@@ -53,7 +56,7 @@ namespace EntityStats
             return totalEvasion;
         }
 
-        public float GetPhysicalDamage(out bool isCrit)
+        public float GetPhysicalDamage(out bool isCrit, float physicalDamage = 0)
         {
             float baseDamage = offenseStats.damage.GetValue();
             // each point of strength adds 1 damage point
@@ -88,7 +91,7 @@ namespace EntityStats
             return finalArmorPen;
         }
 
-        public float GetElementalDamage(out ElementType element)
+        public float GetElementalDamage(out ElementType element, float elementalDamage = 0)
         {
             float fireDmg = offenseStats.fireDmg.GetValue();
             float iceDmg = offenseStats.iceDmg.GetValue();

@@ -1,3 +1,4 @@
+using Data.ElementalEffectData;
 using EntityControl;
 using PlayerControl;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace SkillSystem
     {
         public PlayerController player;
         public EntityHealthController entityHealthController;
+        public DamageScaleData damageScaleData;
+        public PlayerSkillsManager skillsManager;
         
         [Header("General Details")]
         [SerializeField] protected SkillType skillType;
@@ -19,7 +22,8 @@ namespace SkillSystem
         protected virtual void Awake()
         {
             player = GetComponentInParent<PlayerController>();
-            if (!player) Debug.LogError("PlayerController player is null in SkillBase.cs!");
+            if (player == null) Debug.LogError("PlayerController player is null in SkillBase.cs!");
+            skillsManager = player.GetComponent<PlayerSkillsManager>();
             lastTimeUsed -= cooldown;
         }
 
@@ -31,6 +35,7 @@ namespace SkillSystem
         {
             upgradeType = upgradeData.upgradeType;
             cooldown = upgradeData.cooldown;
+            damageScaleData = upgradeData.damageScaleData;
         }
         
         public bool CanUseSkill()

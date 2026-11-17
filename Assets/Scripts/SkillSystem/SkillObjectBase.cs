@@ -1,4 +1,6 @@
 using System;
+using Data.ElementalEffectData;
+using EntityControl;
 using EntityStats;
 using Interface;
 using UnityEngine;
@@ -10,8 +12,13 @@ namespace SkillSystem
         [SerializeField] protected LayerMask enemyMask;
         [SerializeField] protected Transform targetCheck;
         [SerializeField] protected float checkRadius = 1f;
+        [SerializeField] protected float nearestTargetCheck = 10f;
 
-        protected Collider2D[] EnemiesAround(Transform t, float radius) =>
+        protected GeneralStats entityStats;
+        protected DamageScaleData damageScaleData;
+        protected ElementType usedElement;
+        
+        private Collider2D[] EnemiesAround(Transform t, float radius) =>
             Physics2D.OverlapCircleAll(t.position, radius, enemyMask);
 
         protected void DamageEnemiesInRange(Transform t, float radius)
@@ -20,7 +27,19 @@ namespace SkillSystem
             {
                 IDamageable damageable = target.GetComponent<IDamageable>();
                 if (damageable == null) continue;
-                damageable.TakeDamage(1, 1, ElementType.None, transform);
+                
+                AttackData attackData = entityStats.GetAttackData(damageScaleData);
+                EntityStatusHandler statusHandler = target.GetComponent<EntityStatusHandler>();
+
+                float physicalDamage = attackData.physicalDamage;
+                float elementalDamage = attackData.elementalDamage;
+                ElementType element = attackData.elementalType;
+                
+                damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
+                
+                if (element != ElementType.None) statusHandler?.ApplyStatusEffect(element, attackData.elementalEffectData);
+                
+                usedElement = element;
             }
         }
 
@@ -29,7 +48,7 @@ namespace SkillSystem
             Transform target = null;
             float closestDistance = Mathf.Infinity;
 
-            foreach (var enemy in EnemiesAround(transform, 10))
+            foreach (Collider2D enemy in EnemiesAround(transform, nearestTargetCheck))
             {
                 float distance = Vector2.Distance(transform.position, enemy.transform.position);
                 if (!(distance < closestDistance)) continue;
