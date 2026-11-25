@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c511c84cab69bf9358e7807934dd417b, type: 3}
+  m_Name: Skill Data - The Bulletsword
+  m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDataSO
+  skillName: The Bulletsword
+  description: 'Lunch the sword fast forward pearcing up to N enemies in its path. '
+  icon: {fileID: -1620795133, guid: 1c6a03e1e81a229f9a32a0c9925abc9c, type: 3}
+  skillCost: 2
+  isUnlockedByDefault: 0
+  skillType: 3
+  upgradeData:
+    upgradeType: 13
+    cooldown: 4
+    damageScaleData:
+      physicalDamage: 1
+      elementalDamage: 1
+      chillDuration: 3
+      chillSlowMultiplier: 0.2
+      burnDuration: 3
+      burnDamageScale: 1
+      shockDuration: 3
+      shockDamageScale: 1
+      shockChargeScale: 0.4

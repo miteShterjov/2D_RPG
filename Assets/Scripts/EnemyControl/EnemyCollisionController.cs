@@ -71,6 +71,8 @@ namespace EnemyControl
 
             isPlayerDetected = hitPlayer;
         }
+        
+        #region Gizmos
 
         protected override void OnDrawGizmos()
         {
@@ -137,5 +139,7 @@ namespace EnemyControl
                 primaryGroundCheck.position + Vector3.down * groundCheckDistance);
             Gizmos.DrawWireSphere(primaryGroundCheck.position + Vector3.down * groundCheckDistance, wireSphereRadius);
         }
+        
+        #endregion
     }
 }

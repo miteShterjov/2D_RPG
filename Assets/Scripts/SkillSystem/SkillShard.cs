@@ -44,10 +44,11 @@ namespace SkillSystem
 
         private void ForceCooldown()
         {
-            if (OnCooldown()) return;
-            
-            SetSkillOnCooldown();
-            currentShard.OnShardExplode -= ForceCooldown;
+            if (!OnCooldown()) SetSkillOnCooldown();
+
+            SkillObjectShard explodedShard = currentShard;
+            currentShard = null;
+            if (explodedShard) explodedShard.OnShardExplode -= ForceCooldown;
         }
         
         private void HandleShardRegular()

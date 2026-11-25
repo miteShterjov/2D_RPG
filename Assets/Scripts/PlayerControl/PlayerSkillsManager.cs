@@ -8,11 +8,13 @@ namespace PlayerControl
     {
         public SkillSprint Sprint {get; private set;}
         public SkillShard Shard {get; private set;}
+        public SkillSwordThrow SwordThrow {get; private set;}
         
         private void Awake()
         {
             Sprint = GetComponentInChildren<SkillSprint>();
             Shard = GetComponentInChildren<SkillShard>();
+            SwordThrow = GetComponentInChildren<SkillSwordThrow>();
         }
 
         public SkillBase GetSkillByType(SkillType skillType)

@@ -1,15 +1,27 @@
 using EntityStateMachine;
 using PlayerControl;
+using UnityEngine;
 
 namespace PlayerStateMachine
 {
     public class PlayerWallSlide : PlayerState
     {
+        private const float WallSlideVisualOffset = 0.125f;
+        private Vector3 originalAnimatorPosition;
+
         public PlayerWallSlide(
             PlayerController player, 
             StateMachine stateMachine, 
             string animBoolName) : base(player, stateMachine, animBoolName)
         { }
+
+        public override void Enter()
+        {
+            base.Enter();
+            Transform animatorTransform = Player.Animator.transform;
+            originalAnimatorPosition = animatorTransform.localPosition;
+            animatorTransform.localPosition += Vector3.right * WallSlideVisualOffset;
+        }
         
         private PlayerCollisionController PlayerCollision => Player.playerCollision;
         private PlayerMoveController PlayerMove => Player.playerMove;
@@ -29,6 +41,12 @@ namespace PlayerStateMachine
                 PlayerMove.FlipEntitySprite();
             }
 
+        }
+
+        public override void Exit()
+        {
+            Player.Animator.transform.localPosition = originalAnimatorPosition;
+            base.Exit();
         }
 
         private void HandleWallSlide()

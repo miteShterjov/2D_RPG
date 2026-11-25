@@ -16,13 +16,6 @@ namespace EntityControl
         [SerializeField] private Transform targetCheck;
         [SerializeField] private float targetCheckRadius;
         [SerializeField] private LayerMask targetMask;
-        [Header("Status Effects Config")]
-        [SerializeField] private float statusDefaultDuration = 10f;
-        [SerializeField] private float slowSpeedMultiplier = .2f;
-        [SerializeField] private float staticChargeBuildUp = .4f;
-        [Space] 
-        [SerializeField] private float fireScale = .8f;
-        [SerializeField] private float lightningScale = 2.5f;
 
         private EntityVFX entityVFX;
         private GeneralStats generalStats;

@@ -18,7 +18,8 @@ namespace PlayerStateMachine
         public override void Enter()
         {
             base.Enter();
-            if (!mainCamera) mainCamera = Camera.main;
+            skillsManager.SwordThrow.EnableDots(true);
+            if (mainCamera == null) mainCamera = Camera.main;
         }
 
         public override void Update()
@@ -29,11 +30,14 @@ namespace PlayerStateMachine
             
             Player.playerMove.SetVelocity(0, Rb.linearVelocity.y);
             Player.playerMove.HandleFlipEntitySprite(dirToMouse.x);
+            skillsManager.SwordThrow.PredictTrajectory(dirToMouse);
 
             if (Player.playerMove.InputActions.Player.Attack.WasPressedThisFrame())
             {
                 Anim.SetBool(ThrowSwordPerformed, true);
-                //todo skill manager create and throw sword
+                
+                skillsManager.SwordThrow.ConfirmTrajectory(dirToMouse);
+                skillsManager.SwordThrow.EnableDots(false);
             }
 
             if (Player.playerMove.InputActions.Player.RangeAttack.WasReleasedThisFrame() || TriggerCalled)
@@ -46,6 +50,8 @@ namespace PlayerStateMachine
         {
             base.Exit();
             Anim.SetBool(ThrowSwordPerformed, false);
+            
+            skillsManager.SwordThrow.EnableDots(false);
         }
 
         private Vector2 DirectionToMouse()

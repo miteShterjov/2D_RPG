@@ -2,6 +2,6 @@ namespace SkillSystem
 {
     public enum SkillType
     {
-        Sprint, TimeEcho, TimeShard
+        Sprint, TimeEcho, TimeShard, SwordThrow
     }
 }

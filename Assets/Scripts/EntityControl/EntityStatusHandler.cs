@@ -74,14 +74,17 @@ namespace EntityControl
         {
             switch (elementType)
             {
-                case ElementType.Ice when CanEffectBeApplied(ElementType.Ice):
-                    ApplyChillEffect(effectData.chillDuration, effectData.chillDuration);
+                case ElementType.Ice:
+                    if (CanEffectBeApplied(ElementType.Ice))
+                        ApplyChillEffect(effectData.chillDuration, effectData.chillSlowEffect);
                     break;
-                case ElementType.Fire when CanEffectBeApplied(ElementType.Fire):
-                    ApplyBurningEffect(effectData.burnDuration, effectData.burnDamage);
+                case ElementType.Fire:
+                    if (CanEffectBeApplied(ElementType.Fire))
+                        ApplyBurningEffect(effectData.burnDuration, effectData.burnDamage);
                     break;
-                case ElementType.Lightning when CanEffectBeApplied(ElementType.Lightning):
-                    ApplyLightningEffect(effectData.shockDuration, effectData.shockDamage, effectData.shockCharge);
+                case ElementType.Lightning:
+                    if (CanEffectBeApplied(ElementType.Lightning))
+                        ApplyLightningEffect(effectData.shockDuration, effectData.shockDamage, effectData.shockCharge);
                     break;
                 case ElementType.None:
                     break;

@@ -29,9 +29,10 @@ namespace PlayerStateMachine
         {
             base.Update();
          
-            if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame() && CanSprint())
+            if (Player.playerMove.InputActions.Player.Sprint.WasPressedThisFrame()
+                && CanSprint()
+                && skillsManager.Sprint.TryConsumeSprintCharge())
             {
-                skillsManager.Sprint.SetSkillOnCooldown();
                 StateMachine.ChangeState(Player.SprintState);
             }
         }
@@ -44,7 +45,7 @@ namespace PlayerStateMachine
 
         private bool CanSprint()
         {
-            if (!skillsManager.Sprint.CanUseSkill()) return false;
+            if (!skillsManager.Sprint.CanUseSprint()) return false;
             if (Player.playerCollision.IsWallDetected) return false;
             if (StateMachine.CurrentState == Player.SprintState) return false;
             return true;

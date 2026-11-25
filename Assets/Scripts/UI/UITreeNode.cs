@@ -28,7 +28,10 @@ namespace UI
         private UITreeConnectionHandler connectionHandler;
 
         private Color lastColor;
+        private Material originalIconMaterial;
+        private Material grayscaleIconMaterial;
         private const string LockedColorHexString = "#9F9797";
+        private static readonly int GrayscalePropertyId = Shader.PropertyToID("_Grayscale");
 
         private void Awake()
         {
@@ -36,8 +39,24 @@ namespace UI
             rectTransform = GetComponent<RectTransform>();
             skillTree = GetComponentInParent<UISkillTree>();
             connectionHandler = GetComponent<UITreeConnectionHandler>();
-            
-            UpdateSkillIconColor(GetColorFromHex(LockedColorHexString));
+
+            if (skillIcon)
+            {
+                Shader grayscaleShader = Shader.Find("UI/SkillIconGrayscale");
+                if (!grayscaleShader)
+                {
+                    Debug.LogError("UI/SkillIconGrayscale shader could not be found.", this);
+                }
+                else
+                {
+                    originalIconMaterial = skillIcon.material;
+                    grayscaleIconMaterial = new Material(grayscaleShader);
+                    skillIcon.material = grayscaleIconMaterial;
+                }
+            }
+
+            UpdateSkillIconColor(isUnlocked ? Color.white : GetColorFromHex(LockedColorHexString));
+            UpdateSkillIconGrayscale(!isUnlocked);
         }
         
         private void Start()
@@ -81,6 +100,7 @@ namespace UI
             isUnlocked = false;
             isLocked = false;
             UpdateSkillIconColor(GetColorFromHex(LockedColorHexString));
+            UpdateSkillIconGrayscale(true);
             skillTree.AddSkillPoints(skillData.skillCost);
             connectionHandler.ConnectionImageUnlocked(false);
         }
@@ -99,6 +119,17 @@ namespace UI
         {
             if(isLocked) UpdateSkillIconColor(GetColorFromHex(LockedColorHexString));
             if(isUnlocked) UpdateSkillIconColor(Color.white);
+            UpdateSkillIconGrayscale(!isUnlocked);
+        }
+
+        private void OnDestroy()
+        {
+            if (skillIcon && skillIcon.material == grayscaleIconMaterial)
+                skillIcon.material = originalIconMaterial;
+
+            if (!grayscaleIconMaterial) return;
+            if (Application.isPlaying) Destroy(grayscaleIconMaterial);
+            else DestroyImmediate(grayscaleIconMaterial);
         }
 
         private bool CanBeUnlocked()
@@ -107,23 +138,31 @@ namespace UI
             
             if (!skillTree.HasEnoughSkillPoints(skillData.skillCost)) return false;
 
-            if (neededNodes.Any(node => !node.isUnlocked))
+            if (neededNodes != null && neededNodes.Any(node => !node || !node.isUnlocked))
             {
                 return false;
             }
 
-            return conflictedNodes.All(node => !node.isUnlocked);
+            return conflictedNodes == null || conflictedNodes.All(node => !node || !node.isUnlocked);
         }
 
         private void UnlockSkillPoint()
         {
             isUnlocked = true;
             UpdateSkillIconColor(Color.white);
+            UpdateSkillIconGrayscale(false);
             LockConflictedNodes();
             skillTree.SpendSkillPoints(skillData.skillCost);
             connectionHandler.ConnectionImageUnlocked(true);
 
-            skillTree.SkillsManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData.upgradeData);
+            if (skillData.upgradeData == null)
+            {
+                Debug.LogWarning($"Talent '{skillData.skillName}' has no upgrade data assigned.", this);
+            }
+            else
+            {
+                skillTree.SkillsManager.GetSkillByType(skillData.skillType).SetSkillUpgrade(skillData.upgradeData);
+            }
         }
 
         private void UpdateSkillIconColor(Color color)
@@ -131,6 +170,12 @@ namespace UI
             if (!skillIcon) return;
             lastColor = skillIcon.color;
             skillIcon.color = color;
+        }
+
+        private void UpdateSkillIconGrayscale(bool isGrayscale)
+        {
+            if (grayscaleIconMaterial)
+                grayscaleIconMaterial.SetFloat(GrayscalePropertyId, isGrayscale ? 1f : 0f);
         }
 
         private void ToggleNodeHighlight(bool isHighlighted)
@@ -146,11 +191,14 @@ namespace UI
         
         private void LockConflictedNodes()
         {
+            if (conflictedNodes == null) return;
+
             foreach (UITreeNode conflictedNode in conflictedNodes)
             {
+                if (!conflictedNode) continue;
                 conflictedNode.isLocked = true;
                 conflictedNode.LockChildNodes();
-                UpdateSkillIconColor(lockedColor);
+                conflictedNode.UpdateSkillIconColor(lockedColor);
             }
         }
 

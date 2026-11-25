@@ -140,6 +140,7 @@ MonoBehaviour:
   playerHealth: {fileID: 0}
   statusHandler: {fileID: 0}
   skillsManager: {fileID: 0}
+  playerVFX: {fileID: 0}
 --- !u!114 &6842785540670126196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,16 +197,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControl.PlayerCombatController
   targetColliders: []
+  basicAttackScale:
+    physicalDamage: 1
+    elementalDamage: 1
+    chillDuration: 3
+    chillSlowMultiplier: 0.2
+    burnDuration: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockChargeScale: 0.4
   targetCheck: {fileID: 4980924674023252399}
   targetCheckRadius: 1.2
   targetMask:
     serializedVersion: 2
     m_Bits: 512
-  statusDefaultDuration: 10
-  slowSpeedMultiplier: 0.5
-  staticChargeBuildUp: 0.4
-  fireScale: 0.8
-  lightningScale: 2.5
   counterRecovery: 0.3
 --- !u!114 &4044141020632980510
 MonoBehaviour:
@@ -236,13 +242,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EntityStats.EntityStats
   defaultStatSetup: {fileID: 11400000, guid: 74664110e81a6a808b6204bc95e7bbd6, type: 2}
-  elementType: 0
+  elementType: 3
   baseStats:
     maxHealth:
-      baseValue: 10000
+      baseValue: 100
       modifiers: []
     healthRegen:
-      baseValue: 50
+      baseValue: 0
       modifiers: []
     maxMana:
       baseValue: 0
@@ -261,7 +267,7 @@ MonoBehaviour:
       baseValue: 1
       modifiers: []
     damage:
-      baseValue: 25
+      baseValue: 10
       modifiers: []
     critPower:
       baseValue: 0
@@ -276,7 +282,7 @@ MonoBehaviour:
       baseValue: 0
       modifiers: []
     iceDmg:
-      baseValue: 0
+      baseValue: 20
       modifiers: []
     lightningDmg:
       baseValue: 0
@@ -359,6 +365,9 @@ MonoBehaviour:
   iceHitEffectColor: {r: 0, g: 1, b: 1, a: 1}
   fireHitEffectColor: {r: 1, g: 0.2705882, b: 0, a: 1}
   thunderHitEffectColor: {r: 0.6627451, g: 0.6627451, b: 0.6627451, a: 1}
+  imageEchoInterval: 0.02
+  imageEchoPrefab: {fileID: 5602877208274838093, guid: 760c08d7378eedf86b16f32a8a75d345, type: 3}
+  imageEchoLifetime: 0.5
 --- !u!1 &3745823865213687573
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,7 +379,7 @@ GameObject:
   - component: {fileID: 2877779152174619305}
   - component: {fileID: 2757787704753036332}
   - component: {fileID: 247367522250174565}
-  - component: {fileID: 7490651030343158850}
+  - component: {fileID: 1473603683301050818}
   m_Layer: 0
   m_Name: Animator
   m_TagString: Untagged
@@ -440,7 +449,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 226717623
   m_SortingLayer: 3
-  m_SortingOrder: 9999
+  m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: e6a32347b572288cdb2ba149093a8002, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -474,7 +483,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7490651030343158850
+--- !u!114 &1473603683301050818
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -483,7 +492,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3745823865213687573}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba249b8ddf5044b586128f0c826354e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 801f9814c51b4949b219f35ecd214cf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControl.PlayerAnimTriggersHandler
 --- !u!1 &4432715737640900407
@@ -589,6 +598,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9149779312022918341}
   - component: {fileID: 2628244492217991558}
+  - component: {fileID: 7771649533735793115}
+  - component: {fileID: 8048388245920284631}
   m_Layer: 8
   m_Name: SkillHolder
   m_TagString: Untagged
@@ -623,9 +634,93 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3825813a9224616b5c0877947e23e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillDash
+  player: {fileID: 0}
+  entityHealthController: {fileID: 0}
+  damageScaleData:
+    physicalDamage: 1
+    elementalDamage: 1
+    chillDuration: 3
+    chillSlowMultiplier: 0.2
+    burnDuration: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockChargeScale: 0.4
+  skillsManager: {fileID: 0}
   skillType: 0
   upgradeType: 0
   cooldown: 2
+  maxSprintCharges: 2
+  defaultSprintCooldown: 2
+--- !u!114 &7771649533735793115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929439162964495453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fe29ac23294485ad026a6bf2f4b55b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillShard
+  player: {fileID: 0}
+  entityHealthController: {fileID: 0}
+  damageScaleData:
+    physicalDamage: 1
+    elementalDamage: 1
+    chillDuration: 3
+    chillSlowMultiplier: 0.2
+    burnDuration: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockChargeScale: 0.4
+  skillsManager: {fileID: 0}
+  skillType: 0
+  upgradeType: 0
+  cooldown: 0
+  shardPrefab: {fileID: 7196596714474473085, guid: c5b395443ee4839338398c457f200a3f, type: 3}
+  detonationTime: 2
+  shardSpeed: 7
+  maxCharges: 3
+  currentCharge: 3
+  isCharging: 0
+  shardExistDuration: 10
+  savedHealthPercent: 0
+--- !u!114 &8048388245920284631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8929439162964495453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8e58a40ae64a6b94e5caf47ea1ac6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillSwordThrow
+  player: {fileID: 0}
+  entityHealthController: {fileID: 0}
+  damageScaleData:
+    physicalDamage: 1
+    elementalDamage: 1
+    chillDuration: 3
+    chillSlowMultiplier: 0.2
+    burnDuration: 3
+    burnDamageScale: 1
+    shockDuration: 3
+    shockDamageScale: 1
+    shockChargeScale: 0.4
+  skillsManager: {fileID: 0}
+  skillType: 3
+  upgradeType: 0
+  cooldown: 0
+  throwPower: 6
+  swordGravity: 3.5
+  predictionDot: {fileID: 5603699385584208449, guid: 33249a435499ea30b8ef52fef51010ca, type: 3}
+  numberOfDots: 20
+  spaceBetweenDots: 0.05
 --- !u!1001 &1851318995167856733
 PrefabInstance:
   m_ObjectHideFlags: 0

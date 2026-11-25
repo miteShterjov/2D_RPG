@@ -2,12 +2,14 @@ using UnityEngine;
 
 namespace SkillSystem
 {
-    public class SkillObjectSpinSword : SkillObjectSword
+    public class SkillObjectSwordSpin : SkillObjectSword
     {
         private int maxDistance;
         private float attackPerSecond;
         private float attackTimer;
         private static readonly int SpinAnimEvent = Animator.StringToHash("Spin");
+
+        protected override bool RequiresAnimator => true;
         
         protected override void Update()
         {
@@ -24,6 +26,8 @@ namespace SkillSystem
             attackPerSecond = swordSkillManager.attackPerSecond;
             
             if (animator != null) animator.SetTrigger(SpinAnimEvent); 
+            
+            Invoke(nameof(GetSwordBackToPlayer), swordManager.maxSpeedDuration);
         }
 
         protected override void OnTriggerEnter2D(Collider2D other)
@@ -35,6 +39,7 @@ namespace SkillSystem
         {
             const float radius = 1.5f;
 
+            attackTimer -= Time.deltaTime;
             if (!(attackTimer < 0)) return;
             DamageEnemiesInRange(transform, radius);
             attackTimer = 1f / attackPerSecond;

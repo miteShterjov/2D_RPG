@@ -46,11 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcaa384f076f4ea19920e35e21ee501c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillSystem.SkillObjectShard
+  onHitEffectPrefab: {fileID: 1606242323058815732, guid: 32f0f9ae1bfb83337b59a9d25bb03643, type: 3}
   enemyMask:
     serializedVersion: 2
     m_Bits: 512
   targetCheck: {fileID: 6338006321284039087}
   checkRadius: 1
+  nearestTargetCheck: 10
   effectPrefab: {fileID: 477026421597133132, guid: 4c9484d48110b1545b08c6f65d1abeac, type: 3}
 --- !u!58 &1603922620257653042
 CircleCollider2D:

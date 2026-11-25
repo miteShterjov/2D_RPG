@@ -1,5 +1,4 @@
 using EntityControl;
-using UnityEngine;
 
 namespace EnemyControl
 {

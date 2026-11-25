@@ -35,7 +35,9 @@ namespace PlayerControl
         private void CreateImageEcho()
         {
             GameObject imageEcho = Instantiate(imageEchoPrefab, transform.position, Quaternion.identity);
-            imageEcho.GetComponentInChildren<SpriteRenderer>().sprite = spriteRenderer.sprite;
+            SpriteRenderer imageEchoRenderer = imageEcho.GetComponentInChildren<SpriteRenderer>();
+            imageEchoRenderer.sprite = spriteRenderer.sprite;
+            imageEchoRenderer.flipX = transform.localScale.x < 0;
             Destroy(imageEcho, imageEchoLifetime);
         }
     }

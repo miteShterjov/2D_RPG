@@ -39,7 +39,8 @@ namespace PlayerStateMachine
                 StateMachine.ChangeState(Player.CounterAttack);
             }
 
-            if (Player.playerMove.InputActions.Player.RangeAttack.WasPressedThisFrame())
+            if (Player.playerMove.InputActions.Player.RangeAttack.WasPressedThisFrame() 
+                && skillsManager.SwordThrow.CanUseSkill())
             {
                 StateMachine.ChangeState(Player.SwordThrowState);
             }

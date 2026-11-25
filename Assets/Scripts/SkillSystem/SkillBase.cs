@@ -24,6 +24,7 @@ namespace SkillSystem
             player = GetComponentInParent<PlayerController>();
             if (player == null) Debug.LogError("PlayerController player is null in SkillBase.cs!");
             skillsManager = player.GetComponent<PlayerSkillsManager>();
+            entityHealthController = player.GetComponent<EntityHealthController>();
             lastTimeUsed -= cooldown;
         }
 
@@ -35,10 +36,10 @@ namespace SkillSystem
         {
             upgradeType = upgradeData.upgradeType;
             cooldown = upgradeData.cooldown;
-            damageScaleData = upgradeData.damageScaleData;
+            damageScaleData = upgradeData.damageScaleData ?? damageScaleData ?? new DamageScaleData();
         }
         
-        public bool CanUseSkill()
+        public virtual bool CanUseSkill()
         {
             if (upgradeType == SkillUpgradeType.None) return false;
             return !OnCooldown();

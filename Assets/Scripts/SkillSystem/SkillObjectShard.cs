@@ -53,7 +53,7 @@ namespace SkillSystem
             Destroy(gameObject);
         }
         
-        private void OnTriggerEnter2D(Collider2D other)
+        protected virtual void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.CompareTag("Enemy")) return;
 
