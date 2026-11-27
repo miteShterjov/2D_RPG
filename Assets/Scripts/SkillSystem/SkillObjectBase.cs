@@ -20,7 +20,9 @@ namespace SkillSystem
         protected DamageScaleData damageScaleData;
         protected ElementType usedElement;
         protected bool targetGotHit;
+        protected Transform lastTarget;
         protected Animator animator;
+        protected Rigidbody2D rb;
         
         private readonly List<Collider2D> enemyBuffer = new();
         private ContactFilter2D enemyFilter;
@@ -35,6 +37,7 @@ namespace SkillSystem
             animator = GetComponentInChildren<Animator>();
             if (animator == null && RequiresAnimator)
                 Debug.LogError($"Animator not found on {GetType().Name}", this);
+            rb = GetComponent<Rigidbody2D>();
         }
         
         protected List<Collider2D> GetEnemiesAround(Transform t, float radius)
@@ -61,7 +64,11 @@ namespace SkillSystem
                 targetGotHit = damageable.TakeDamage(physicalDamage, elementalDamage, element, transform);
                 
                 if (element != ElementType.None) statusHandler?.ApplyStatusEffect(element, attackData.elementalEffectData);
-                if (targetGotHit) Instantiate(onHitEffectPrefab, target.transform.position, Quaternion.identity);
+                if (targetGotHit)
+                {
+                    lastTarget = target.transform;
+                    Instantiate(onHitEffectPrefab, target.transform.position, Quaternion.identity);
+                }
                 
                 usedElement = element;
             }

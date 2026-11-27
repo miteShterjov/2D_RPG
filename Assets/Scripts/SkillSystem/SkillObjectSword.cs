@@ -9,7 +9,6 @@ namespace SkillSystem
 
         protected SkillSwordThrow swordManager;
         protected Transform playerTransform;
-        protected Rigidbody2D rb;
         
         private bool shouldComeBack;
         private readonly float comeBackSpeed = 20f;

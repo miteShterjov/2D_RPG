@@ -7,3 +7,8 @@ in the bookmarksa for more effects in fire and ice.
 5. enemy skeleton weird issues transfering between states, idle, battle, attacking etc, once enemy has aggro.
 6. tool tip in skill tree should be above the skills icons.
 7. "time echo" skill rebrand to "void shadow" and and violet color to the sprite overall, similar to wow shadow priest
+todo: 
+- imma circle back and redo the skills system. do wow type action bar with 4-6 abilities, dunno yet, prob add an ult too,
+ still dont know cuz i dont want to be a moba hero with 3+1. anyway, use the skill system to unlock power ups to the 
+ abilites. like abilites will be basic attack, summ shard, summ time echo?(or rename to void shadow), sprint, 
+ sword throw.

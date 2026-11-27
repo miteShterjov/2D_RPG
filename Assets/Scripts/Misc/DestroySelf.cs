@@ -14,8 +14,8 @@ namespace Misc
             Invoke(nameof(OnDestroy), lifetime - 0.1f);
         }
 
-        public void DestroyNow() => Destroy(gameObject);
-
+        public void DestroyNow() => Destroy(transform.parent != null ? transform.parent.gameObject : gameObject);
+        
         private void OnDestroy()
         {
             if (explosionEffectPrefab != null)

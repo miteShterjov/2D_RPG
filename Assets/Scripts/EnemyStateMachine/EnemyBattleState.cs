@@ -16,6 +16,7 @@ namespace EnemyStateMachine
         }
         
         private Transform player;
+        private Transform lastTarget;
         private float lastTimeWasInBattle;
 
         public override void Enter()
@@ -58,11 +59,14 @@ namespace EnemyStateMachine
             }
 
             if (Enemy.enemyCollision.isPlayerDetected)
+            {
+                UpdateTargetIfNecessary();
                 UpdateBattleTimer();
+            }
 
             if (IsPlayerCloseEnough() && Enemy.enemyCollision.isPlayerDetected)
             {
-                StateMachine.ChangeState(Enemy.AttackState);
+                StateMachine.ChangeState(Enemy.AttackState);    
                 return;
             }
 
@@ -73,6 +77,15 @@ namespace EnemyStateMachine
             }
 
             Enemy.enemyMove.SetVelocity(Enemy.battleMoveSpeed * DirectionToPlayer(), Enemy.Rb.linearVelocity.y);
+        }
+
+        private void UpdateTargetIfNecessary()
+        {
+            if (Enemy.enemyCollision.DetectedPlayer == false) return;
+            Transform newTarget = Enemy.enemyCollision.DetectedPlayer.transform;
+            if (newTarget == null || newTarget == lastTarget) return;
+            lastTarget = newTarget;
+            player = newTarget;
         }
 
         private bool ShouldEnemyRetreat() => DistanceToPlayer() < Enemy.minRetreatDistance;

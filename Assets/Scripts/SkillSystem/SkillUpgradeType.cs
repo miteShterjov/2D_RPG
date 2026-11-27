@@ -24,5 +24,14 @@ namespace SkillSystem
         SwordThrowPierce, // Player throws the sword to damage enemies from a distance and pierces through N enemies
         SwordThrowBounce, // Player throws the sword to damage enemies from a distance and bounces off N enemies
         
+        // ------ Time Echo ------
+        TimeEcho, // Create a clone of a player. It can take damage from enemies.
+        TimeEchoSingleAttack, // Time Echo can perform a single attack
+        TimeEchoMultiAttack, // Time Echo can perform N attacks
+        TimeEchoChanceToMultiply, // Time Echo has a chance to create another time echo when attacks
+        
+        TimeEchoHealWisp, // When time echo dies it creates a wips that goes to player to heal it percentage of damage taken when died
+        TimeEchoCleanseWisp, // Wisp will now remove negative effects from player
+        TimeEchoCooldownWisp // Wisp will reduce cooldown of all skills by N second.
     }
 }

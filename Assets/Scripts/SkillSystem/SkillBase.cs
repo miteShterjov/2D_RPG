@@ -1,16 +1,18 @@
 using Data.ElementalEffectData;
 using EntityControl;
 using PlayerControl;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SkillSystem
 {
     public class SkillBase : MonoBehaviour
     {
-        public PlayerController player;
-        public EntityHealthController entityHealthController;
-        public DamageScaleData damageScaleData;
-        public PlayerSkillsManager skillsManager;
+        [DoNotSerialize]
+        [HideInInspector] public PlayerController player;
+        [HideInInspector] public EntityHealthController entityHealthController;
+        [HideInInspector] public DamageScaleData damageScaleData;
+        [HideInInspector] public PlayerSkillsManager skillsManager;
         
         [Header("General Details")]
         [SerializeField] protected SkillType skillType;

@@ -67,14 +67,14 @@ namespace EnemyControl
             StateMachine.ChangeState(BattleState);
         }
 
-        private void InitEnemyControllers()
+        public void InitEnemyControllers()
         {
             enemyMove = GetComponent<EnemyMoveController>();
             enemyCollision = GetComponent<EnemyCollisionController>();
             enemyCombat = GetComponent<EnemyCombatController>();
         }
 
-        private void HandlePlayerDeath()
+        public void HandlePlayerDeath()
         {
             Player = null;
             if (StateMachine.CurrentState == DeathState || StateMachine.CurrentState == IdleState) return;

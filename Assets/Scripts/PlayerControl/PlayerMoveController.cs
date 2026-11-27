@@ -47,6 +47,9 @@ namespace PlayerControl
 
             InputActions.Player.SpellCast.performed += ctx => 
                 playerController.skillsManager.Shard.TryUseSkill();
+            
+            InputActions.Player.SpellCast.performed += ctx => 
+                playerController.skillsManager.TimeEcho.TryUseSkill();
         }
         
         private void OnDisable()

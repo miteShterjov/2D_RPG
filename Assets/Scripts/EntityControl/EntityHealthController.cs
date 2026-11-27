@@ -28,6 +28,7 @@ namespace EntityControl
 
         protected virtual void Start()
         {
+            if (generalStats == null) return;
             currentHealth = generalStats.GetMaxHealth();
             UpdateHealthBar();
             InvokeRepeating(nameof(RegenHealth), 0, regenInterval);
@@ -41,13 +42,13 @@ namespace EntityControl
         {
             if (isDead) return false;
             if (IsAttackEvaded()) return false;
-            if (!damageSource) return false;
+            if (damageSource == null) return false;
 
             GeneralStats attackerStats = damageSource.GetComponentInParent<GeneralStats>();
             float armorPenetration = attackerStats != null ? attackerStats.GetArmorPenetration() : 0f;
-            float armorMitigation = generalStats.GetArmorMitigation(armorPenetration);
+            float armorMitigation = generalStats != null ? generalStats.GetArmorMitigation(armorPenetration) : 0f;
+            float eleResistance = generalStats != null ? generalStats.GetElementalResistance(elementType) : 0f;
            
-            float eleResistance = generalStats.GetElementalResistance(elementType);
             float eleDmgTaken = elementalDamage * (1 - eleResistance);
             
             float physicalDmg = damage * (1 - armorMitigation);
@@ -58,10 +59,15 @@ namespace EntityControl
             return true;
         }
 
-        public float GetHealthPercentage() => currentHealth / generalStats.GetMaxHealth();
+        public float GetHealthPercentage()
+        {
+            if (generalStats == null) return 0;
+            return currentHealth / generalStats.GetMaxHealth();
+        }
         
         public void SetHealthToPercentage(float percentage) 
         {
+            if (generalStats == null) return;
             currentHealth = generalStats.GetMaxHealth() * Mathf.Clamp01(percentage);
             UpdateHealthBar();
         }
@@ -77,7 +83,7 @@ namespace EntityControl
         private void IncreaseHealth(float regenAmount)
         {
             if (isDead) return;
-
+            if (generalStats == null) return;
             float newHealth = currentHealth + regenAmount;
             float maxHealth = generalStats.GetMaxHealth();
             
@@ -88,20 +94,25 @@ namespace EntityControl
         private void RegenHealth()
         {
             if (!canRegen) return;
-            
+            if (generalStats == null) return;
             float regenAmount = generalStats.baseStats.healthRegen.GetValue();
             IncreaseHealth(regenAmount);
         }
 
-        private bool IsAttackEvaded() => Random.Range(0, 100) < generalStats.GetEvasion();
+        private bool IsAttackEvaded() 
+        {
+            if (generalStats == null) return  false;
+            else return Random.Range(0, 100) < generalStats.GetEvasion();
+        }
 
         private void UpdateHealthBar()
         {
             if (healthBar == null) return;
+            if (generalStats == null) return;
             healthBar.value = generalStats.GetMaxHealth() > 0f ? currentHealth / generalStats.GetMaxHealth() : 0f;
         }
 
-        private void DoDeathSequence()
+        protected virtual void DoDeathSequence()
         {  
             isDead = true;
             GetComponent<EntityController>().EntityDeath();
